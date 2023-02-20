@@ -1,0 +1,22 @@
+
+The ComputationalGraphPrimer (CGP) module was created with a modest goal in
+mind: its purpose is merely to serve as a prelude to discussing
+automatic calculation of the loss gradients in modern Python based
+platforms for deep learning.
+
+Most students taking classes on deep learning focus on just using the
+tools provided by platforms such as PyTorch without any understanding
+of how the tools really work.  
+
+Consider, for example, Autograd --- a module that is at the heart of
+PyTorch --- for automatic differentiation of tensors. With no effort
+on the part of the programmer, and through the functionality built
+into the torch.Tensor class, the Autograd module keeps track of a
+tensor through all calculations involving the tensor and computes its
+partial derivatives with respect to the other entities involved in the
+calculations.  These derivatives are subsequently used to estimate the
+gradient of the loss with respect to the learnable parameters and for
+backpropagating the loss.
+
+Using small handcrafted networks, the goal of CGP is to help the
+students gain deeper insights into Autograd's above-described logic.

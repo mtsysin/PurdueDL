@@ -1,0 +1,19 @@
+include MANIFEST.in
+include ComputationalGraphPrimer/ComputationalGraphPrimer.py
+include ComputationalGraphPrimer/__init__.py
+include setup.py
+include Makefile
+include README
+include ComputationalGraphPrimer-1.1.2.html
+include TestComputationalGraphPrimer/ComputationalGraphPrimer.py
+include TestComputationalGraphPrimer/TestInstanceCreation.py
+include TestComputationalGraphPrimer/Test.py
+include Examples/graph_based_dataflow.py
+include Examples/one_neuron_classifier.py
+include Examples/multi_neuron_classifier.py
+include Examples/verify_with_torchnn.py
+include Examples/extending_autograd.py
+
+
+
+

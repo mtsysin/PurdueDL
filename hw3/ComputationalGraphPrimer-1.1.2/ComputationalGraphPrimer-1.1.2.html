@@ -1,0 +1,1124 @@
+ <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> 
+<html lang="en">
+<head>
+<title>
+ComputationalGraphPrimer-1.1.2.html
+</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body bgcolor="#f0f0f8">
+<table width="100%" cellspacing="0" cellpadding="2" border="0" summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>ComputationalGraphPrimer</strong></big></big> (version 1.1.2, 2023-February-2)</font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial">
+</font></td></tr></table>
+<p><a href="#ComputationalGraphPrimer"><tt>ComputationalGraphPrimer</tt></a>.py<br>
+<tt>
+&nbsp;<br>
+Version:&nbsp;1.1.2<br>
+&nbsp;&nbsp;&nbsp;<br>
+Author:&nbsp;Avinash&nbsp;Kak&nbsp;(kak@purdue.edu)<br>
+&nbsp;<br>
+Date:&nbsp;2023-February-2<br>
+&nbsp;<br>
+&nbsp;<br>
+</tt>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="2"> 
+<TR>
+<TH ALIGN=left>
+<tt>
+<b>Download Version 1.1.2:</b>&nbsp;  
+<a HREF="https://engineering.purdue.edu/kak/distCGP/ComputationalGraphPrimer-1.1.2.tar.gz?download">gztar</a> 
+&nbsp;             
+<br>
+<br>
+&nbsp;
+</tt>
+</TH>
+<TD>
+<tt>
+&nbsp;&nbsp;&nbsp;&nbsp;
+Total number of downloads (all versions): 
+<?php   
+    $file = fopen("HowManyCounts.txt", "r") or exit("Unable to open file!");
+    echo fgets($file);
+    fclose($file);
+?>
+</tt>
+<br>
+<center>
+<tt>
+<font color="red" size="-2">
+&nbsp;&nbsp;&nbsp;&nbsp;
+This count is automatically updated at every rotation of
+<br> 
+&nbsp;&nbsp;&nbsp;&nbsp;
+the weblogs (normally once every two to four days)
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+Last updated:
+<?php   
+    $file = fopen("LastUpdated.txt", "r") or exit("Unable to open file!");
+    echo fgets($file);
+    fclose($file);
+?>
+</font>
+</tt>
+</center>
+</TD>
+</TR>
+</TABLE>
+<br>
+<tt>
+<a HREF="ComputationalGraphPrimer-1.1.2_CodeOnly.html">View the main module code file in your browser</a> 
+&nbsp;<br>
+&nbsp;<br>
+&nbsp;<br>
+<font size="+2" color="red">CHANGES:<br>
+</font>
+<br>
+
+&nbsp;&nbsp;Version&nbsp;1.1.2:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Fixes&nbsp;a&nbsp;couple&nbsp;of&nbsp;additional&nbsp;bugs,&nbsp;one&nbsp;dealing&nbsp;with&nbsp;the&nbsp;misalignment&nbsp;of<br>
+&nbsp;&nbsp;&nbsp;&nbsp;variables&nbsp;and&nbsp;parameters&nbsp;in&nbsp;the&nbsp;backpropagation&nbsp;logic&nbsp;for&nbsp;the&nbsp;one-neuron<br>
+&nbsp;&nbsp;&nbsp;&nbsp;case,&nbsp;and&nbsp;the&nbsp;other&nbsp;with&nbsp;the&nbsp;example&nbsp;script&nbsp;"verify_with_torchnn.py"&nbsp;not<br>
+&nbsp;&nbsp;&nbsp;&nbsp;working&nbsp;on&nbsp;account&nbsp;of&nbsp;the&nbsp;previous&nbsp;changes&nbsp;to&nbsp;the&nbsp;module&nbsp;code.&nbsp;&nbsp;Thanks&nbsp;to<br>
+&nbsp;&nbsp;&nbsp;&nbsp;all&nbsp;who&nbsp;discovered&nbsp;these&nbsp;bugs.<br>
+&nbsp;<br>
+&nbsp;&nbsp;Version&nbsp;1.1.1:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Includes&nbsp;a&nbsp;bug&nbsp;fix&nbsp;in&nbsp;the&nbsp;parser&nbsp;for&nbsp;the&nbsp;expressions&nbsp;that&nbsp;define&nbsp;a<br>
+&nbsp;&nbsp;&nbsp;&nbsp;multi-layer&nbsp;neural&nbsp;network.&nbsp;&nbsp;The&nbsp;bug&nbsp;was&nbsp;causing&nbsp;the&nbsp;input&nbsp;nodes&nbsp;to&nbsp;be<br>
+&nbsp;&nbsp;&nbsp;&nbsp;replicated&nbsp;when&nbsp;parsing&nbsp;the&nbsp;expressions&nbsp;at&nbsp;each&nbsp;node&nbsp;in&nbsp;the&nbsp;second&nbsp;layer&nbsp;of<br>
+&nbsp;&nbsp;&nbsp;&nbsp;such&nbsp;a&nbsp;network.&nbsp;&nbsp;Many&nbsp;thanks&nbsp;to&nbsp;the&nbsp;student&nbsp;who&nbsp;discovered&nbsp;the&nbsp;bug.<br>
+&nbsp;<br>
+&nbsp;&nbsp;Version&nbsp;1.1.0:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;network&nbsp;visualization&nbsp;code&nbsp;in&nbsp;this&nbsp;version&nbsp;figures&nbsp;out&nbsp;the&nbsp;network<br>
+&nbsp;&nbsp;&nbsp;&nbsp;layout&nbsp;from&nbsp;the&nbsp;specification&nbsp;of&nbsp;the&nbsp;network&nbsp;in&nbsp;a&nbsp;user's&nbsp;script.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Previously,&nbsp;I&nbsp;had&nbsp;hand&nbsp;coded&nbsp;the&nbsp;visualization&nbsp;code&nbsp;for&nbsp;the&nbsp;specific<br>
+&nbsp;&nbsp;&nbsp;&nbsp;networks&nbsp;in&nbsp;the&nbsp;Examples&nbsp;directory&nbsp;of&nbsp;the&nbsp;distribution.<br>
+&nbsp;<br>
+&nbsp;&nbsp;Version&nbsp;1.0.9:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;I&nbsp;have&nbsp;added&nbsp;to&nbsp;the&nbsp;in-code&nbsp;documentation&nbsp;to&nbsp;make&nbsp;it&nbsp;easier&nbsp;to&nbsp;understand<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;implementation&nbsp;code.&nbsp;&nbsp;And&nbsp;wherever&nbsp;appropriate,&nbsp;I&nbsp;have&nbsp;also&nbsp;included<br>
+&nbsp;&nbsp;&nbsp;&nbsp;pointers&nbsp;to&nbsp;my&nbsp;Week&nbsp;3&nbsp;slides&nbsp;for&nbsp;the&nbsp;DL&nbsp;class&nbsp;at&nbsp;Purdue&nbsp;for&nbsp;more&nbsp;detailed<br>
+&nbsp;&nbsp;&nbsp;&nbsp;explanations&nbsp;of&nbsp;the&nbsp;logic&nbsp;implemented&nbsp;in&nbsp;a&nbsp;code&nbsp;fragment.&nbsp;&nbsp;Additionally,&nbsp;I<br>
+&nbsp;&nbsp;&nbsp;&nbsp;have&nbsp;incorporated&nbsp;better&nbsp;graph&nbsp;and&nbsp;neural-network&nbsp;display&nbsp;routines&nbsp;in&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;module.<br>
+&nbsp;<br>
+&nbsp;&nbsp;Version&nbsp;1.0.8:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;To&nbsp;make&nbsp;the&nbsp;code&nbsp;in&nbsp;the&nbsp;Example&nbsp;scripts&nbsp;easier&nbsp;to&nbsp;understand,&nbsp;the&nbsp;random<br>
+&nbsp;&nbsp;&nbsp;&nbsp;training&nbsp;data&nbsp;generator&nbsp;now&nbsp;returns&nbsp;the&nbsp;data&nbsp;that&nbsp;you&nbsp;can&nbsp;subsequently<br>
+&nbsp;&nbsp;&nbsp;&nbsp;supply&nbsp;to&nbsp;the&nbsp;training&nbsp;function.&nbsp;&nbsp;(See&nbsp;the&nbsp;scripts&nbsp;in&nbsp;the&nbsp;Examples&nbsp;directory<br>
+&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;what&nbsp;I&nbsp;mean.)&nbsp;&nbsp;I&nbsp;have&nbsp;also&nbsp;provided&nbsp;additional&nbsp;comments&nbsp;in&nbsp;the&nbsp;main<br>
+&nbsp;&nbsp;&nbsp;&nbsp;class&nbsp;file&nbsp;to&nbsp;help&nbsp;understand&nbsp;the&nbsp;code&nbsp;better.<br>
+&nbsp;<br>
+&nbsp;&nbsp;Version&nbsp;1.0.7:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;I&nbsp;have&nbsp;fixed&nbsp;some&nbsp;documentation&nbsp;errors&nbsp;in&nbsp;this&nbsp;version&nbsp;and&nbsp;also&nbsp;cleaned&nbsp;up<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;code&nbsp;by&nbsp;deleting&nbsp;functions&nbsp;not&nbsp;used&nbsp;in&nbsp;the&nbsp;demos.&nbsp;&nbsp;The&nbsp;basic&nbsp;codebase<br>
+&nbsp;&nbsp;&nbsp;&nbsp;remains&nbsp;the&nbsp;same&nbsp;as&nbsp;in&nbsp;1.0.6.<br>
+&nbsp;<br>
+&nbsp;&nbsp;Version&nbsp;1.0.6:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;This&nbsp;version&nbsp;includes&nbsp;a&nbsp;demonstration&nbsp;of&nbsp;how&nbsp;to&nbsp;extend&nbsp;PyTorch's&nbsp;Autograd<br>
+&nbsp;&nbsp;&nbsp;&nbsp;class&nbsp;if&nbsp;you&nbsp;wish&nbsp;to&nbsp;customize&nbsp;how&nbsp;the&nbsp;learnable&nbsp;parameters&nbsp;are&nbsp;updated<br>
+&nbsp;&nbsp;&nbsp;&nbsp;during&nbsp;backprop&nbsp;on&nbsp;the&nbsp;basis&nbsp;of&nbsp;the&nbsp;data&nbsp;conditions&nbsp;discovered&nbsp;during&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;forward&nbsp;propagation.&nbsp;&nbsp;Previously&nbsp;this&nbsp;material&nbsp;was&nbsp;in&nbsp;the&nbsp;DLStudio&nbsp;module.<br>
+&nbsp;<br>
+&nbsp;&nbsp;Version&nbsp;1.0.5:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;I&nbsp;have&nbsp;been&nbsp;experimenting&nbsp;with&nbsp;different&nbsp;ideas&nbsp;for&nbsp;increasing&nbsp;the&nbsp;tutorial<br>
+&nbsp;&nbsp;&nbsp;&nbsp;appeal&nbsp;of&nbsp;this&nbsp;module.&nbsp;&nbsp;(That&nbsp;is&nbsp;the&nbsp;reason&nbsp;for&nbsp;the&nbsp;jump&nbsp;in&nbsp;the&nbsp;version<br>
+&nbsp;&nbsp;&nbsp;&nbsp;number&nbsp;from&nbsp;1.0.2&nbsp;to&nbsp;the&nbsp;current&nbsp;1.0.5.)&nbsp;&nbsp;The&nbsp;previous&nbsp;public&nbsp;version<br>
+&nbsp;&nbsp;&nbsp;&nbsp;provided&nbsp;a&nbsp;simple&nbsp;demonstration&nbsp;of&nbsp;how&nbsp;one&nbsp;could&nbsp;forward&nbsp;propagate&nbsp;data<br>
+&nbsp;&nbsp;&nbsp;&nbsp;through&nbsp;a&nbsp;DAG&nbsp;(Directed&nbsp;Acyclic&nbsp;Graph)&nbsp;while&nbsp;at&nbsp;the&nbsp;same&nbsp;compute&nbsp;the&nbsp;partial<br>
+&nbsp;&nbsp;&nbsp;&nbsp;derivatives&nbsp;that&nbsp;would&nbsp;be&nbsp;needed&nbsp;subsequently&nbsp;during&nbsp;the&nbsp;backpropagation<br>
+&nbsp;&nbsp;&nbsp;&nbsp;step&nbsp;for&nbsp;updating&nbsp;the&nbsp;values&nbsp;of&nbsp;the&nbsp;learnable&nbsp;parameters.&nbsp;&nbsp;In&nbsp;1.0.2,&nbsp;my&nbsp;goal<br>
+&nbsp;&nbsp;&nbsp;&nbsp;was&nbsp;just&nbsp;to&nbsp;illustrate&nbsp;what&nbsp;was&nbsp;meant&nbsp;by&nbsp;a&nbsp;DAG&nbsp;and&nbsp;how&nbsp;to&nbsp;use&nbsp;such&nbsp;a<br>
+&nbsp;&nbsp;&nbsp;&nbsp;representation&nbsp;for&nbsp;forward&nbsp;data&nbsp;flow&nbsp;and&nbsp;backward&nbsp;parameter&nbsp;update.&nbsp;&nbsp;Since&nbsp;I<br>
+&nbsp;&nbsp;&nbsp;&nbsp;had&nbsp;not&nbsp;incorporated&nbsp;any&nbsp;nonlinearities&nbsp;in&nbsp;such&nbsp;networks,&nbsp;there&nbsp;was<br>
+&nbsp;&nbsp;&nbsp;&nbsp;obviously&nbsp;no&nbsp;real&nbsp;learning&nbsp;taking&nbsp;place.&nbsp;&nbsp;That&nbsp;fact&nbsp;was&nbsp;made&nbsp;evident&nbsp;by&nbsp;a<br>
+&nbsp;&nbsp;&nbsp;&nbsp;plot&nbsp;of&nbsp;training&nbsp;loss&nbsp;versus&nbsp;iterations.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;To&nbsp;remedy&nbsp;this&nbsp;shortcoming&nbsp;of&nbsp;the&nbsp;previous&nbsp;public-release&nbsp;version,&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;current&nbsp;version&nbsp;introduces&nbsp;two&nbsp;special&nbsp;cases&nbsp;of&nbsp;networks&nbsp;---&nbsp;a&nbsp;one-neuron<br>
+&nbsp;&nbsp;&nbsp;&nbsp;network&nbsp;and&nbsp;a&nbsp;multi-neuron&nbsp;network&nbsp;---&nbsp;for&nbsp;experimenting&nbsp;with&nbsp;forward<br>
+&nbsp;&nbsp;&nbsp;&nbsp;propagation&nbsp;of&nbsp;data&nbsp;while&nbsp;calculating&nbsp;the&nbsp;partial&nbsp;derivatives&nbsp;needed&nbsp;later,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;followed&nbsp;by&nbsp;backpropagation&nbsp;of&nbsp;the&nbsp;prediction&nbsp;errors&nbsp;for&nbsp;updating&nbsp;the&nbsp;values<br>
+&nbsp;&nbsp;&nbsp;&nbsp;of&nbsp;the&nbsp;learnable&nbsp;parameters.&nbsp;In&nbsp;both&nbsp;cases,&nbsp;I&nbsp;have&nbsp;used&nbsp;the&nbsp;Sigmoid<br>
+&nbsp;&nbsp;&nbsp;&nbsp;activation&nbsp;function&nbsp;at&nbsp;the&nbsp;nodes.&nbsp;The&nbsp;partial&nbsp;derivatives&nbsp;that&nbsp;are<br>
+&nbsp;&nbsp;&nbsp;&nbsp;calculated&nbsp;in&nbsp;the&nbsp;forward&nbsp;direction&nbsp;are&nbsp;based&nbsp;on&nbsp;analytical&nbsp;formulas&nbsp;at&nbsp;both<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;pre-activation&nbsp;point&nbsp;for&nbsp;data&nbsp;aggregation&nbsp;and&nbsp;the&nbsp;post-activation&nbsp;point.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;forward&nbsp;and&nbsp;backward&nbsp;calculations&nbsp;incorporate&nbsp;smoothing&nbsp;of&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;prediction&nbsp;errors&nbsp;and&nbsp;the&nbsp;derivatives&nbsp;over&nbsp;a&nbsp;batch&nbsp;as&nbsp;required&nbsp;by&nbsp;stochastic<br>
+&nbsp;&nbsp;&nbsp;&nbsp;gradient&nbsp;descent.<br>
+&nbsp;<br>
+&nbsp;&nbsp;Version&nbsp;1.0.2:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;This&nbsp;version&nbsp;reflects&nbsp;the&nbsp;change&nbsp;in&nbsp;the&nbsp;name&nbsp;of&nbsp;the&nbsp;module&nbsp;that&nbsp;was<br>
+&nbsp;&nbsp;&nbsp;&nbsp;initially&nbsp;released&nbsp;under&nbsp;the&nbsp;name&nbsp;CompGraphPrimer&nbsp;with&nbsp;version&nbsp;1.0.1<br>
+&nbsp;<br>
+&nbsp;<br>
+<font size="+2" color="red">INTRODUCTION:<br>
+</font>&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;This&nbsp;module&nbsp;was&nbsp;created&nbsp;with&nbsp;a&nbsp;modest&nbsp;goal&nbsp;in&nbsp;mind:&nbsp;its&nbsp;purpose&nbsp;being&nbsp;merely<br>
+&nbsp;&nbsp;&nbsp;&nbsp;to&nbsp;serve&nbsp;as&nbsp;a&nbsp;prelude&nbsp;to&nbsp;discussing&nbsp;automatic&nbsp;calculation&nbsp;of&nbsp;the&nbsp;gradients<br>
+&nbsp;&nbsp;&nbsp;&nbsp;as&nbsp;the&nbsp;input&nbsp;training&nbsp;data&nbsp;forward&nbsp;propagates&nbsp;through&nbsp;a&nbsp;network&nbsp;of&nbsp;nodes<br>
+&nbsp;&nbsp;&nbsp;&nbsp;that&nbsp;form&nbsp;a&nbsp;directed&nbsp;acyclic&nbsp;graph&nbsp;(DAG).<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Most&nbsp;students&nbsp;taking&nbsp;classes&nbsp;on&nbsp;deep&nbsp;learning&nbsp;focus&nbsp;on&nbsp;just&nbsp;using&nbsp;the&nbsp;tools<br>
+&nbsp;&nbsp;&nbsp;&nbsp;provided&nbsp;by&nbsp;platforms&nbsp;such&nbsp;as&nbsp;PyTorch&nbsp;without&nbsp;any&nbsp;understanding&nbsp;of&nbsp;how&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;tools&nbsp;really&nbsp;work.&nbsp;&nbsp;Consider,&nbsp;for&nbsp;example,&nbsp;Autograd&nbsp;---&nbsp;a&nbsp;module&nbsp;that&nbsp;is&nbsp;at<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;heart&nbsp;of&nbsp;PyTorch&nbsp;---&nbsp;for&nbsp;automatic&nbsp;calculation&nbsp;of&nbsp;the&nbsp;Jacobian&nbsp;of&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;output&nbsp;of&nbsp;a&nbsp;layer&nbsp;with&nbsp;respect&nbsp;to&nbsp;all&nbsp;the&nbsp;learnable&nbsp;parameters&nbsp;in&nbsp;the&nbsp;layer.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;With&nbsp;no&nbsp;effort&nbsp;on&nbsp;the&nbsp;part&nbsp;of&nbsp;the&nbsp;programmer,&nbsp;and&nbsp;through&nbsp;the&nbsp;functionality<br>
+&nbsp;&nbsp;&nbsp;&nbsp;built&nbsp;into&nbsp;the&nbsp;"torch.Tensor"&nbsp;class,&nbsp;the&nbsp;Autograd&nbsp;module&nbsp;keeps&nbsp;track&nbsp;of&nbsp;a<br>
+&nbsp;&nbsp;&nbsp;&nbsp;tensor&nbsp;through&nbsp;all&nbsp;calculations&nbsp;involving&nbsp;the&nbsp;tensor&nbsp;and&nbsp;computes&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;partial&nbsp;derivatives&nbsp;of&nbsp;the&nbsp;output&nbsp;of&nbsp;the&nbsp;layer&nbsp;with&nbsp;respect&nbsp;to&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;parameters&nbsp;stored&nbsp;in&nbsp;the&nbsp;tensor.&nbsp;&nbsp;These&nbsp;derivatives&nbsp;are&nbsp;subsequently&nbsp;used&nbsp;to<br>
+&nbsp;&nbsp;&nbsp;&nbsp;update&nbsp;the&nbsp;values&nbsp;of&nbsp;the&nbsp;learnable&nbsp;parameters&nbsp;during&nbsp;the&nbsp;backpropagation<br>
+&nbsp;&nbsp;&nbsp;&nbsp;step.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;1)&nbsp;&nbsp;&nbsp;&nbsp;To&nbsp;introduce&nbsp;you&nbsp;to&nbsp;forward&nbsp;and&nbsp;backward&nbsp;dataflows&nbsp;in&nbsp;a&nbsp;Directed&nbsp;Acyclic<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Graph&nbsp;(DAG).<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;2)&nbsp;&nbsp;&nbsp;&nbsp;To&nbsp;extend&nbsp;the&nbsp;material&nbsp;developed&nbsp;for&nbsp;the&nbsp;first&nbsp;goal&nbsp;with&nbsp;simple&nbsp;examples<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of&nbsp;neural&nbsp;networks&nbsp;for&nbsp;demonstrating&nbsp;the&nbsp;forward&nbsp;and&nbsp;backward<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dataflows&nbsp;for&nbsp;the&nbsp;purpose&nbsp;of&nbsp;updating&nbsp;the&nbsp;learnable&nbsp;parameters.&nbsp;&nbsp;This<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;part&nbsp;of&nbsp;the&nbsp;module&nbsp;also&nbsp;includes&nbsp;a&nbsp;comparison&nbsp;of&nbsp;the&nbsp;performance&nbsp;of<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;such&nbsp;networks&nbsp;with&nbsp;those&nbsp;constructed&nbsp;using&nbsp;torch.nn&nbsp;components.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;3)&nbsp;&nbsp;&nbsp;&nbsp;To&nbsp;explain&nbsp;how&nbsp;the&nbsp;behavior&nbsp;of&nbsp;PyTorch's&nbsp;Autograd&nbsp;class&nbsp;can&nbsp;be&nbsp;customized<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to&nbsp;your&nbsp;specific&nbsp;data&nbsp;needs&nbsp;by&nbsp;extending&nbsp;that&nbsp;class.<br>
+&nbsp;<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;GOAL&nbsp;1:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;first&nbsp;goal&nbsp;of&nbsp;this&nbsp;Primer&nbsp;is&nbsp;to&nbsp;introduce&nbsp;you&nbsp;to&nbsp;forward&nbsp;and&nbsp;backward<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dataflows&nbsp;in&nbsp;a&nbsp;general&nbsp;DAG.&nbsp;The&nbsp;acronym&nbsp;DAG&nbsp;stands&nbsp;for&nbsp;Directed&nbsp;Acyclic<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Graph.&nbsp;Just&nbsp;for&nbsp;the&nbsp;educational&nbsp;value&nbsp;of&nbsp;playing&nbsp;with&nbsp;dataflows&nbsp;in&nbsp;DAGs,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;this&nbsp;module&nbsp;allows&nbsp;you&nbsp;to&nbsp;create&nbsp;a&nbsp;DAG&nbsp;of&nbsp;variables&nbsp;with&nbsp;a&nbsp;statement&nbsp;like<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;expressions&nbsp;=&nbsp;['xx=xa^2',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'xy=ab*xx+ac*xa',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'xz=bc*xx+xy',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'xw=cd*xx+xz^3']<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;we&nbsp;assume&nbsp;that&nbsp;a&nbsp;symbolic&nbsp;name&nbsp;that&nbsp;beings&nbsp;with&nbsp;the&nbsp;letter&nbsp;'x'&nbsp;is&nbsp;a<br>
+&nbsp;&nbsp;&nbsp;&nbsp;variable,&nbsp;all&nbsp;other&nbsp;symbolic&nbsp;names&nbsp;being&nbsp;learnable&nbsp;parameters,&nbsp;and&nbsp;where&nbsp;we<br>
+&nbsp;&nbsp;&nbsp;&nbsp;use&nbsp;'^'&nbsp;for&nbsp;exponentiation.&nbsp;The&nbsp;four&nbsp;expressions&nbsp;shown&nbsp;above&nbsp;contain&nbsp;five<br>
+&nbsp;&nbsp;&nbsp;&nbsp;variables&nbsp;---&nbsp;'xx',&nbsp;'xa',&nbsp;'xy',&nbsp;'xz',&nbsp;and&nbsp;'xw'&nbsp;---&nbsp;and&nbsp;four&nbsp;learnable<br>
+&nbsp;&nbsp;&nbsp;&nbsp;parameters:&nbsp;'ab',&nbsp;'ac',&nbsp;'bc',&nbsp;and&nbsp;'cd'.&nbsp;&nbsp;The&nbsp;DAG&nbsp;that&nbsp;is&nbsp;generated&nbsp;by&nbsp;these<br>
+&nbsp;&nbsp;&nbsp;&nbsp;expressions&nbsp;looks&nbsp;like:<br>
+&nbsp;<br>
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;________________________________&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xx=xa**2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xa&nbsp;--------------&gt;&nbsp;xx&nbsp;-----------------&gt;&nbsp;xy&nbsp;&nbsp;&nbsp;xy&nbsp;=&nbsp;ab*xx&nbsp;+&nbsp;ac*xa<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\_____________&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;V&nbsp;V&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xz&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;xz&nbsp;=&nbsp;bc*xx&nbsp;+&nbsp;xy&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-----&gt;&nbsp;xw&nbsp;&lt;----&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xw&nbsp;&nbsp;=&nbsp;cd*xx&nbsp;+&nbsp;xz&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+<br>
+
+
+&nbsp;<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;By&nbsp;the&nbsp;way,&nbsp;you&nbsp;can&nbsp;call&nbsp;'display_network2()'&nbsp;on&nbsp;an&nbsp;instance&nbsp;of<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ComputationalGraphPrimer&nbsp;to&nbsp;make&nbsp;a&nbsp;much&nbsp;better&nbsp;looking&nbsp;plot&nbsp;of&nbsp;the&nbsp;network<br>
+&nbsp;&nbsp;&nbsp;&nbsp;graph&nbsp;for&nbsp;any&nbsp;DAG&nbsp;created&nbsp;by&nbsp;the&nbsp;sort&nbsp;of&nbsp;expressions&nbsp;shown&nbsp;above.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;In&nbsp;the&nbsp;DAG&nbsp;shown&nbsp;above,&nbsp;the&nbsp;variable&nbsp;'xa'&nbsp;is&nbsp;an&nbsp;independent&nbsp;variable&nbsp;since<br>
+&nbsp;&nbsp;&nbsp;&nbsp;it&nbsp;has&nbsp;no&nbsp;incoming&nbsp;arcs,&nbsp;and&nbsp;'xw'&nbsp;is&nbsp;an&nbsp;output&nbsp;variable&nbsp;since&nbsp;it&nbsp;has&nbsp;no<br>
+&nbsp;&nbsp;&nbsp;&nbsp;outgoing&nbsp;arcs.&nbsp;A&nbsp;DAG&nbsp;of&nbsp;the&nbsp;sort&nbsp;shown&nbsp;above&nbsp;is&nbsp;represented&nbsp;in<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ComputationalGraphPrimer&nbsp;by&nbsp;two&nbsp;dictionaries:&nbsp;'depends_on'&nbsp;and&nbsp;'leads_to'.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Here&nbsp;is&nbsp;what&nbsp;the&nbsp;'depends_on'&nbsp;dictionary&nbsp;would&nbsp;look&nbsp;like&nbsp;for&nbsp;the&nbsp;DAG&nbsp;shown<br>
+&nbsp;&nbsp;&nbsp;&nbsp;above:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;depends_on['xx']&nbsp;&nbsp;=&nbsp;&nbsp;['xa']<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;depends_on['xy']&nbsp;&nbsp;=&nbsp;&nbsp;['xa',&nbsp;'xx']<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;depends_on['xz']&nbsp;&nbsp;=&nbsp;&nbsp;['xx',&nbsp;'xy']<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;depends_on['xw']&nbsp;&nbsp;=&nbsp;&nbsp;['xx',&nbsp;'xz']<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Something&nbsp;like&nbsp;"depends_on['xx']&nbsp;=&nbsp;['xa']"&nbsp;is&nbsp;best&nbsp;read&nbsp;as&nbsp;"the&nbsp;vertex&nbsp;'xx'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;depends&nbsp;on&nbsp;the&nbsp;vertex&nbsp;'xa'."&nbsp;&nbsp;Similarly,&nbsp;the&nbsp;"depends_on['xz']&nbsp;=&nbsp;['xx',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;'xy']"&nbsp;is&nbsp;best&nbsp;read&nbsp;aloud&nbsp;as&nbsp;"the&nbsp;vertex&nbsp;'xz'&nbsp;depends&nbsp;on&nbsp;the&nbsp;vertices&nbsp;'xx'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;'xy'."&nbsp;And&nbsp;so&nbsp;on.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Whereas&nbsp;the&nbsp;'depends_on'&nbsp;dictionary&nbsp;is&nbsp;a&nbsp;complete&nbsp;description&nbsp;of&nbsp;a&nbsp;DAG,&nbsp;for<br>
+&nbsp;&nbsp;&nbsp;&nbsp;programming&nbsp;convenience,&nbsp;ComputationalGraphPrimer&nbsp;also&nbsp;maintains&nbsp;another<br>
+&nbsp;&nbsp;&nbsp;&nbsp;representation&nbsp;for&nbsp;the&nbsp;same&nbsp;graph,&nbsp;as&nbsp;provide&nbsp;by&nbsp;the&nbsp;'leads_to'&nbsp;dictionary.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;This&nbsp;dictionary&nbsp;for&nbsp;the&nbsp;same&nbsp;graph&nbsp;as&nbsp;shown&nbsp;above&nbsp;would&nbsp;be:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;leads_to['xa']&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;['xx',&nbsp;'xy']<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;leads_to['xx']&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;['xy',&nbsp;'xz',&nbsp;'xw']<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;leads_to['xy']&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;['xz']&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;leads_to['xz']&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;&nbsp;['xw']<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;"leads_to[xa]&nbsp;=&nbsp;[xx]"&nbsp;is&nbsp;best&nbsp;read&nbsp;as&nbsp;"the&nbsp;outgoing&nbsp;edge&nbsp;at&nbsp;the&nbsp;node<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'xa'&nbsp;leads&nbsp;to&nbsp;the&nbsp;node&nbsp;'xx'."&nbsp;&nbsp;Along&nbsp;the&nbsp;same&nbsp;lines,&nbsp;the&nbsp;"leads_to['xx']&nbsp;=<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;['xy',&nbsp;'xz',&nbsp;'xw']"&nbsp;is&nbsp;best&nbsp;read&nbsp;as&nbsp;"the&nbsp;outgoing&nbsp;edges&nbsp;at&nbsp;the&nbsp;vertex&nbsp;'xx'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lead&nbsp;to&nbsp;the&nbsp;vertices&nbsp;'xy',&nbsp;'xz',&nbsp;and&nbsp;'xw'.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Given&nbsp;a&nbsp;computational&nbsp;graph&nbsp;like&nbsp;the&nbsp;one&nbsp;shown&nbsp;above,&nbsp;we&nbsp;are&nbsp;faced&nbsp;with&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;following&nbsp;questions:&nbsp;(1)&nbsp;How&nbsp;to&nbsp;propagate&nbsp;the&nbsp;information&nbsp;from&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;independent&nbsp;nodes&nbsp;---&nbsp;that&nbsp;we&nbsp;can&nbsp;refer&nbsp;to&nbsp;as&nbsp;the&nbsp;input&nbsp;nodes&nbsp;---&nbsp;to&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output&nbsp;nodes,&nbsp;these&nbsp;being&nbsp;the&nbsp;nodes&nbsp;with&nbsp;only&nbsp;incoming&nbsp;edges?&nbsp;&nbsp;(2)&nbsp;As&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;information&nbsp;flows&nbsp;in&nbsp;the&nbsp;forward&nbsp;direction,&nbsp;meaning&nbsp;from&nbsp;the&nbsp;input&nbsp;nodes&nbsp;to<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;output&nbsp;nodes,&nbsp;is&nbsp;it&nbsp;possible&nbsp;to&nbsp;estimate&nbsp;the&nbsp;partial&nbsp;derivatives&nbsp;that<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;apply&nbsp;to&nbsp;each&nbsp;link&nbsp;in&nbsp;the&nbsp;graph?&nbsp;&nbsp;And,&nbsp;finally,&nbsp;(3)&nbsp;Given&nbsp;a&nbsp;scalar&nbsp;value&nbsp;at<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;an&nbsp;output&nbsp;node&nbsp;(which&nbsp;could&nbsp;be&nbsp;the&nbsp;loss&nbsp;estimated&nbsp;at&nbsp;that&nbsp;node),&nbsp;can&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;partial&nbsp;derivatives&nbsp;estimated&nbsp;during&nbsp;the&nbsp;forward&nbsp;pass&nbsp;be&nbsp;used&nbsp;to<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;backpropagate&nbsp;the&nbsp;loss?<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Consider,&nbsp;for&nbsp;example,&nbsp;the&nbsp;directed&nbsp;link&nbsp;between&nbsp;the&nbsp;node&nbsp;'xy'&nbsp;and&nbsp;node<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'xz'.&nbsp;As&nbsp;a&nbsp;variable,&nbsp;the&nbsp;value&nbsp;of&nbsp;'xz'&nbsp;is&nbsp;calculated&nbsp;through&nbsp;the&nbsp;formula<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"xz&nbsp;=&nbsp;bc*xx&nbsp;+&nbsp;xy".&nbsp;In&nbsp;the&nbsp;forward&nbsp;propagation&nbsp;of&nbsp;information,&nbsp;we&nbsp;estimate<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;value&nbsp;of&nbsp;'xz'&nbsp;from&nbsp;currently&nbsp;known&nbsp;values&nbsp;for&nbsp;the&nbsp;learnable&nbsp;parameter<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'bc'&nbsp;and&nbsp;the&nbsp;variables&nbsp;'xx'&nbsp;and&nbsp;'xy'.&nbsp;&nbsp;In&nbsp;addition&nbsp;to&nbsp;the&nbsp;value&nbsp;of&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;variable&nbsp;at&nbsp;the&nbsp;node&nbsp;'xz',&nbsp;we&nbsp;are&nbsp;also&nbsp;interested&nbsp;in&nbsp;the&nbsp;value&nbsp;of&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;partial&nbsp;derivative&nbsp;of&nbsp;'xz'&nbsp;with&nbsp;respect&nbsp;to&nbsp;the&nbsp;other&nbsp;variables&nbsp;that&nbsp;it<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;depends&nbsp;on&nbsp;---&nbsp;'xx'&nbsp;and&nbsp;'xy'&nbsp;---&nbsp;and&nbsp;also&nbsp;with&nbsp;respect&nbsp;to&nbsp;the&nbsp;parameter&nbsp;it<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;depends&nbsp;on,&nbsp;'bc'.&nbsp;&nbsp;For&nbsp;the&nbsp;calculation&nbsp;of&nbsp;the&nbsp;derivatives,&nbsp;we&nbsp;have&nbsp;a<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;choice:&nbsp;We&nbsp;can&nbsp;either&nbsp;do&nbsp;a&nbsp;bit&nbsp;of&nbsp;computer&nbsp;algebra&nbsp;and&nbsp;figure&nbsp;out&nbsp;that&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;partial&nbsp;of&nbsp;'xz'&nbsp;with&nbsp;respect&nbsp;to&nbsp;'xx'&nbsp;is&nbsp;equal&nbsp;to&nbsp;the&nbsp;current&nbsp;value&nbsp;for<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'bc'.&nbsp;&nbsp;Or,&nbsp;we&nbsp;can&nbsp;use&nbsp;the&nbsp;small&nbsp;finite&nbsp;difference&nbsp;method&nbsp;for&nbsp;doing&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;same,&nbsp;which&nbsp;means&nbsp;that&nbsp;(1)&nbsp;we&nbsp;calculate&nbsp;the&nbsp;value&nbsp;of&nbsp;'xz'&nbsp;for&nbsp;the&nbsp;current<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value&nbsp;of&nbsp;'xx',&nbsp;on&nbsp;the&nbsp;one&nbsp;hand,&nbsp;and,&nbsp;on&nbsp;the&nbsp;other,&nbsp;for&nbsp;'xx'&nbsp;plus&nbsp;a&nbsp;delta;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(2)&nbsp;take&nbsp;the&nbsp;difference&nbsp;of&nbsp;the&nbsp;two;&nbsp;and&nbsp;(3)&nbsp;divide&nbsp;the&nbsp;difference&nbsp;by&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;delta.&nbsp;&nbsp;ComputationalGraphPrimer&nbsp;module&nbsp;uses&nbsp;the&nbsp;finite&nbsp;differences&nbsp;method<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;estimating&nbsp;the&nbsp;partial&nbsp;derivatives.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Since&nbsp;we&nbsp;have&nbsp;two&nbsp;different&nbsp;types&nbsp;of&nbsp;partial&nbsp;derivatives,&nbsp;partial&nbsp;of&nbsp;a<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;variable&nbsp;with&nbsp;respect&nbsp;to&nbsp;another&nbsp;variable,&nbsp;and&nbsp;the&nbsp;partial&nbsp;of&nbsp;a&nbsp;variable<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;with&nbsp;respect&nbsp;a&nbsp;learnable&nbsp;parameter,&nbsp;ComputationalGraphPrimer&nbsp;uses&nbsp;two<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;different&nbsp;dictionaries&nbsp;for&nbsp;storing&nbsp;this&nbsp;partials&nbsp;during&nbsp;each&nbsp;forward&nbsp;pass.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Partials&nbsp;of&nbsp;variables&nbsp;with&nbsp;respect&nbsp;to&nbsp;other&nbsp;variables&nbsp;as&nbsp;encountered&nbsp;during<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;forward&nbsp;propagation&nbsp;are&nbsp;stored&nbsp;in&nbsp;the&nbsp;dictionary&nbsp;"partial_var_to_var"&nbsp;and<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;partials&nbsp;of&nbsp;the&nbsp;variables&nbsp;with&nbsp;respect&nbsp;to&nbsp;the&nbsp;learnable&nbsp;parameters&nbsp;are<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stored&nbsp;in&nbsp;the&nbsp;dictionary&nbsp;partial_var_to_param.&nbsp;&nbsp;At&nbsp;the&nbsp;end&nbsp;of&nbsp;each&nbsp;forward<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pass,&nbsp;the&nbsp;relevant&nbsp;partials&nbsp;extracted&nbsp;from&nbsp;these&nbsp;dictionaries&nbsp;are&nbsp;used&nbsp;to<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;estimate&nbsp;the&nbsp;gradients&nbsp;of&nbsp;the&nbsp;loss&nbsp;with&nbsp;respect&nbsp;to&nbsp;the&nbsp;learnable<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parameters,&nbsp;as&nbsp;illustrated&nbsp;in&nbsp;the&nbsp;implementation&nbsp;of&nbsp;the&nbsp;method<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;train_on_all_data().<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;While&nbsp;the&nbsp;exercise&nbsp;mentioned&nbsp;above&nbsp;is&nbsp;good&nbsp;for&nbsp;appreciating&nbsp;data&nbsp;flows&nbsp;in&nbsp;a<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;general&nbsp;DAG,&nbsp;you've&nbsp;got&nbsp;to&nbsp;realize&nbsp;that,&nbsp;with&nbsp;today's&nbsp;algorithms,&nbsp;it&nbsp;would<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;be&nbsp;impossible&nbsp;to&nbsp;carry&nbsp;out&nbsp;any&nbsp;learning&nbsp;in&nbsp;a&nbsp;general&nbsp;DAG.&nbsp;&nbsp;A&nbsp;general&nbsp;DAG<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;with&nbsp;millions&nbsp;of&nbsp;learnable&nbsp;parameters&nbsp;would&nbsp;not&nbsp;lend&nbsp;itself&nbsp;to&nbsp;a&nbsp;fast<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;calculation&nbsp;of&nbsp;the&nbsp;partial&nbsp;derivatives&nbsp;that&nbsp;are&nbsp;needed&nbsp;during&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;backpropagation&nbsp;step.&nbsp;&nbsp;Since&nbsp;the&nbsp;exercise&nbsp;described&nbsp;above&nbsp;is&nbsp;just&nbsp;to&nbsp;get<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;you&nbsp;thinking&nbsp;about&nbsp;data&nbsp;flows&nbsp;in&nbsp;DAGs&nbsp;and&nbsp;nothing&nbsp;else,&nbsp;I&nbsp;have&nbsp;not&nbsp;bothered<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to&nbsp;include&nbsp;any&nbsp;activation&nbsp;functions&nbsp;in&nbsp;the&nbsp;DAG&nbsp;demonstration&nbsp;code&nbsp;in&nbsp;this<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Primer.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GOAL&nbsp;2:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;That&nbsp;brings&nbsp;us&nbsp;to&nbsp;the&nbsp;second&nbsp;major&nbsp;goal&nbsp;of&nbsp;this&nbsp;Primer&nbsp;module:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To&nbsp;provide&nbsp;examples&nbsp;of&nbsp;simple&nbsp;neural&nbsp;structures&nbsp;in&nbsp;which&nbsp;the&nbsp;required<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;partial&nbsp;derivatives&nbsp;are&nbsp;calculated&nbsp;during&nbsp;forward&nbsp;data&nbsp;propagation&nbsp;and<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;subsequently&nbsp;used&nbsp;for&nbsp;parameter&nbsp;update&nbsp;during&nbsp;the&nbsp;backpropagation&nbsp;of<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;loss.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In&nbsp;order&nbsp;to&nbsp;become&nbsp;familiar&nbsp;with&nbsp;how&nbsp;this&nbsp;is&nbsp;done&nbsp;in&nbsp;the&nbsp;module,&nbsp;your&nbsp;best<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;place&nbsp;to&nbsp;start&nbsp;would&nbsp;be&nbsp;the&nbsp;following&nbsp;two&nbsp;scripts&nbsp;in&nbsp;the&nbsp;Examples&nbsp;directory<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of&nbsp;the&nbsp;distribution:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;one_neuron_classifier.py<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;multi_neuron_classifier.py&nbsp;&nbsp;<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;first&nbsp;script,&nbsp;"one_neuron_classifier.py",&nbsp;invokes&nbsp;the&nbsp;following<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;function&nbsp;from&nbsp;the&nbsp;module:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;run_training_loop_one_neuron_model()<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This&nbsp;function,&nbsp;in&nbsp;turn,&nbsp;calls&nbsp;the&nbsp;following&nbsp;functions,&nbsp;the&nbsp;first&nbsp;for<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;forward&nbsp;propagation&nbsp;of&nbsp;the&nbsp;data,&nbsp;and&nbsp;the&nbsp;second&nbsp;for&nbsp;the&nbsp;backpropagation&nbsp;of<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;loss&nbsp;and&nbsp;updating&nbsp;of&nbsp;the&nbsp;parameters&nbsp;values:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;forward_prop_one_neuron_model()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;backprop_and_update_params_one_neuron_model()<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;data&nbsp;that&nbsp;is&nbsp;forward&nbsp;propagated&nbsp;to&nbsp;the&nbsp;output&nbsp;node&nbsp;is&nbsp;subject&nbsp;to<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sigmoid&nbsp;activation.&nbsp;&nbsp;The&nbsp;derivatives&nbsp;that&nbsp;are&nbsp;calculated&nbsp;during&nbsp;forward<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;propagation&nbsp;of&nbsp;the&nbsp;data&nbsp;include&nbsp;the&nbsp;partial&nbsp;'output&nbsp;vs.&nbsp;input'&nbsp;derivatives<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;the&nbsp;Sigmoid&nbsp;nonlinearity.&nbsp;The&nbsp;backpropagation&nbsp;step&nbsp;implemented&nbsp;in&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;second&nbsp;of&nbsp;the&nbsp;two&nbsp;functions&nbsp;listed&nbsp;above&nbsp;includes&nbsp;averaging&nbsp;the&nbsp;partial<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;derivatives&nbsp;and&nbsp;the&nbsp;prediction&nbsp;errors&nbsp;over&nbsp;a&nbsp;batch&nbsp;of&nbsp;training&nbsp;samples,&nbsp;as<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;required&nbsp;by&nbsp;SGD.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;second&nbsp;demo&nbsp;script&nbsp;in&nbsp;the&nbsp;Examples&nbsp;directory,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"multi_neuron_classifier.py"&nbsp;creates&nbsp;a&nbsp;neural&nbsp;network&nbsp;with&nbsp;a&nbsp;hidden&nbsp;layer<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;an&nbsp;output&nbsp;layer.&nbsp;&nbsp;Each&nbsp;node&nbsp;in&nbsp;the&nbsp;hidden&nbsp;layer&nbsp;and&nbsp;the&nbsp;node&nbsp;in&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output&nbsp;layer&nbsp;are&nbsp;all&nbsp;subject&nbsp;to&nbsp;Sigmoid&nbsp;activation.&nbsp;&nbsp;This&nbsp;script&nbsp;invokes<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;following&nbsp;function&nbsp;of&nbsp;the&nbsp;module:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;run_training_loop_multi_neuron_model()<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;And&nbsp;this&nbsp;function,&nbsp;in&nbsp;turn,&nbsp;calls&nbsp;upon&nbsp;the&nbsp;following&nbsp;two&nbsp;functions,&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;first&nbsp;for&nbsp;forward&nbsp;propagating&nbsp;the&nbsp;data&nbsp;and&nbsp;the&nbsp;second&nbsp;for&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;backpropagation&nbsp;of&nbsp;loss&nbsp;and&nbsp;updating&nbsp;of&nbsp;the&nbsp;parameters:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;forward_prop_multi_neuron_model()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;backprop_and_update_params_multi_neuron_model()<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In&nbsp;contrast&nbsp;with&nbsp;the&nbsp;one-neuron&nbsp;demo,&nbsp;in&nbsp;this&nbsp;case,&nbsp;the&nbsp;batch-based&nbsp;data<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;that&nbsp;is&nbsp;output&nbsp;by&nbsp;the&nbsp;forward&nbsp;function&nbsp;is&nbsp;sent&nbsp;directly&nbsp;to&nbsp;the&nbsp;backprop<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;function.&nbsp;&nbsp;It&nbsp;then&nbsp;becomes&nbsp;the&nbsp;job&nbsp;of&nbsp;the&nbsp;backprop&nbsp;function&nbsp;to&nbsp;do&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;averaging&nbsp;needed&nbsp;for&nbsp;SGD.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In&nbsp;the&nbsp;Examples&nbsp;directory,&nbsp;you&nbsp;will&nbsp;also&nbsp;find&nbsp;the&nbsp;following&nbsp;script:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;verify_with_torchnn.py<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;idea&nbsp;for&nbsp;this&nbsp;script&nbsp;is&nbsp;to&nbsp;serve&nbsp;as&nbsp;a&nbsp;check&nbsp;on&nbsp;the&nbsp;performance&nbsp;of&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;main&nbsp;demo&nbsp;scripts&nbsp;"one_neuron_classifier.py"&nbsp;and<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"multi_neuron_classifier.py".&nbsp;&nbsp;Note&nbsp;that&nbsp;you&nbsp;cannot&nbsp;expect&nbsp;the&nbsp;performance<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of&nbsp;my&nbsp;one-neuron&nbsp;and&nbsp;multi-neuron&nbsp;scripts&nbsp;to&nbsp;match&nbsp;what&nbsp;you&nbsp;would&nbsp;get&nbsp;from<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;similar&nbsp;networks&nbsp;constructed&nbsp;with&nbsp;components&nbsp;drawn&nbsp;from&nbsp;"torch.nn".&nbsp;&nbsp;One<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;primary&nbsp;reason&nbsp;for&nbsp;that&nbsp;is&nbsp;that&nbsp;"torch.nn"&nbsp;based&nbsp;code&nbsp;uses&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;state-of-the-art&nbsp;optimization&nbsp;of&nbsp;the&nbsp;steps&nbsp;in&nbsp;the&nbsp;parameter&nbsp;hyperplane,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;with&nbsp;is&nbsp;not&nbsp;the&nbsp;case&nbsp;with&nbsp;my&nbsp;demo&nbsp;scripts.&nbsp;&nbsp;Nonetheless,&nbsp;a&nbsp;comparison&nbsp;with<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;"torch.nn"&nbsp;is&nbsp;important&nbsp;for&nbsp;general&nbsp;trend&nbsp;of&nbsp;how&nbsp;the&nbsp;training&nbsp;loss<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;varies&nbsp;with&nbsp;the&nbsp;iterations.&nbsp;&nbsp;That&nbsp;is,&nbsp;if&nbsp;the&nbsp;"torch.nn"&nbsp;based&nbsp;script&nbsp;showed<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;decreasing&nbsp;loss&nbsp;(indicated&nbsp;that&nbsp;learning&nbsp;was&nbsp;taking&nbsp;place)&nbsp;while&nbsp;that&nbsp;was<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not&nbsp;the&nbsp;case&nbsp;with&nbsp;my&nbsp;one-neuron&nbsp;and&nbsp;multi-neuron&nbsp;scripts,&nbsp;that&nbsp;would<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;indicate&nbsp;that&nbsp;perhaps&nbsp;I&nbsp;had&nbsp;made&nbsp;an&nbsp;error&nbsp;in&nbsp;either&nbsp;the&nbsp;computation&nbsp;of&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;partial&nbsp;derivatives&nbsp;during&nbsp;the&nbsp;forward&nbsp;propagation&nbsp;of&nbsp;the&nbsp;data,&nbsp;or&nbsp;I&nbsp;had<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;used&nbsp;the&nbsp;derivatives&nbsp;for&nbsp;updating&nbsp;the&nbsp;parameters.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GOAL&nbsp;3:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;goal&nbsp;here&nbsp;is&nbsp;to&nbsp;show&nbsp;how&nbsp;to&nbsp;extend&nbsp;PyTorch's&nbsp;Autograd&nbsp;class&nbsp;if&nbsp;you&nbsp;want<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to&nbsp;endow&nbsp;it&nbsp;with&nbsp;additional&nbsp;functionality.&nbsp;Let's&nbsp;say&nbsp;that&nbsp;you&nbsp;wish&nbsp;for&nbsp;some<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data&nbsp;condition&nbsp;to&nbsp;be&nbsp;remembered&nbsp;during&nbsp;the&nbsp;forward&nbsp;propagation&nbsp;of&nbsp;the&nbsp;data<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;through&nbsp;a&nbsp;network&nbsp;and&nbsp;then&nbsp;use&nbsp;that&nbsp;condition&nbsp;to&nbsp;alter&nbsp;in&nbsp;some&nbsp;manner&nbsp;how<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;parameters&nbsp;would&nbsp;be&nbsp;updated&nbsp;during&nbsp;backpropagation&nbsp;of&nbsp;the&nbsp;prediction<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;errors.&nbsp;&nbsp;This&nbsp;can&nbsp;be&nbsp;accomplished&nbsp;by&nbsp;subclassing&nbsp;from&nbsp;Autograd&nbsp;and<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;incorporating&nbsp;the&nbsp;desired&nbsp;behavior&nbsp;in&nbsp;the&nbsp;subclass.&nbsp;&nbsp;As&nbsp;to&nbsp;how&nbsp;how&nbsp;you&nbsp;can<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;extend&nbsp;Autograd&nbsp;is&nbsp;demonstrated&nbsp;by&nbsp;the&nbsp;inner&nbsp;class&nbsp;AutogradCustomization&nbsp;in<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this&nbsp;module.&nbsp;Your&nbsp;starting&nbsp;point&nbsp;for&nbsp;understanding&nbsp;what&nbsp;this&nbsp;class&nbsp;does<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;would&nbsp;be&nbsp;the&nbsp;script<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;extending_autograd.py<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in&nbsp;the&nbsp;Examples&nbsp;directory&nbsp;of&nbsp;the&nbsp;distribution.&nbsp;<br>
+&nbsp;<br>
+&nbsp;<br>
+<font size="+2" color="red">INSTALLATION:<br>
+</font>&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;ComputationalGraphPrimer&nbsp;class&nbsp;was&nbsp;packaged&nbsp;using&nbsp;setuptools.&nbsp;&nbsp;For<br>
+&nbsp;&nbsp;&nbsp;&nbsp;installation,&nbsp;execute&nbsp;the&nbsp;following&nbsp;command&nbsp;in&nbsp;the&nbsp;source&nbsp;directory&nbsp;(this&nbsp;is<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;directory&nbsp;that&nbsp;contains&nbsp;the&nbsp;setup.py&nbsp;file&nbsp;after&nbsp;you&nbsp;have&nbsp;downloaded&nbsp;and<br>
+&nbsp;&nbsp;&nbsp;&nbsp;uncompressed&nbsp;the&nbsp;package):<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sudo&nbsp;python3&nbsp;setup.py&nbsp;install<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;On&nbsp;Linux&nbsp;distributions,&nbsp;this&nbsp;will&nbsp;install&nbsp;the&nbsp;module&nbsp;file&nbsp;at&nbsp;a&nbsp;location&nbsp;that<br>
+&nbsp;&nbsp;&nbsp;&nbsp;looks&nbsp;like<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/usr/local/lib/python3.8/dist-packages/<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;If&nbsp;you&nbsp;do&nbsp;not&nbsp;have&nbsp;root&nbsp;access,&nbsp;you&nbsp;have&nbsp;the&nbsp;option&nbsp;of&nbsp;working&nbsp;directly&nbsp;off<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;directory&nbsp;in&nbsp;which&nbsp;you&nbsp;downloaded&nbsp;the&nbsp;software&nbsp;by&nbsp;simply&nbsp;placing&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;following&nbsp;statements&nbsp;at&nbsp;the&nbsp;top&nbsp;of&nbsp;your&nbsp;scripts&nbsp;that&nbsp;use&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ComputationalGraphPrimer&nbsp;class:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;import&nbsp;sys<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sys.path.append(&nbsp;"pathname_to_ComputationalGraphPrimer_directory"&nbsp;)<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;To&nbsp;uninstall&nbsp;the&nbsp;module,&nbsp;simply&nbsp;delete&nbsp;the&nbsp;source&nbsp;directory,&nbsp;locate&nbsp;where<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;ComputationalGraphPrimer&nbsp;module&nbsp;was&nbsp;installed&nbsp;with&nbsp;"locate<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ComputationalGraphPrimer"&nbsp;and&nbsp;delete&nbsp;those&nbsp;files.&nbsp;&nbsp;As&nbsp;mentioned&nbsp;above,&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;full&nbsp;pathname&nbsp;to&nbsp;the&nbsp;installed&nbsp;version&nbsp;is&nbsp;likely&nbsp;to&nbsp;look&nbsp;like<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"/usr/local/lib/python3.8/dist-packages/".<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;If&nbsp;you&nbsp;want&nbsp;to&nbsp;carry&nbsp;out&nbsp;a&nbsp;non-standard&nbsp;install&nbsp;of&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ComputationalGraphPrimer&nbsp;module,&nbsp;look&nbsp;up&nbsp;the&nbsp;on-line&nbsp;information&nbsp;on&nbsp;Disutils<br>
+&nbsp;&nbsp;&nbsp;&nbsp;by&nbsp;pointing&nbsp;your&nbsp;browser&nbsp;to<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://docs.python.org/dist/dist.html">http://docs.python.org/dist/dist.html</a><br>
+&nbsp;<br>
+<font size="+2" color="red">USAGE:<br>
+</font>&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Construct&nbsp;an&nbsp;instance&nbsp;of&nbsp;the&nbsp;ComputationalGraphPrimer&nbsp;class&nbsp;as&nbsp;follows:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from&nbsp;ComputationalGraphPrimer&nbsp;import&nbsp;*<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cgp&nbsp;=&nbsp;ComputationalGraphPrimer(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;expressions&nbsp;=&nbsp;['xx=xa^2',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'xy=ab*xx+ac*xa',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'xz=bc*xx+xy',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'xw=cd*xx+xz^3'],<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output_vars&nbsp;=&nbsp;['xw'],<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dataset_size&nbsp;=&nbsp;10000,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;learning_rate&nbsp;=&nbsp;1e-6,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;grad_delta&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1e-4,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;display_loss_how_often&nbsp;=&nbsp;1000,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cgp.parse_expressions()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cgp.display_network2()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cgp.gen_gt_dataset(vals_for_learnable_params&nbsp;=&nbsp;{'ab':1.0,&nbsp;'bc':2.0,&nbsp;'cd':3.0,&nbsp;'ac':4.0})<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cgp.train_on_all_data()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cgp.plot_loss()<br>
+&nbsp;<br>
+&nbsp;<br>
+<font size="+2" color="red">CONSTRUCTOR&nbsp;PARAMETERS:&nbsp;<br>
+</font>&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;batch_size:&nbsp;Introduced&nbsp;in&nbsp;Version&nbsp;1.0.5&nbsp;for&nbsp;demonstrating&nbsp;forward<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;propagation&nbsp;of&nbsp;the&nbsp;input&nbsp;data&nbsp;while&nbsp;calculating&nbsp;the&nbsp;partial<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;derivatives&nbsp;needed&nbsp;during&nbsp;backpropagation&nbsp;of&nbsp;loss.&nbsp;For&nbsp;SGD,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;updating&nbsp;the&nbsp;parameters&nbsp;involves&nbsp;smoothing&nbsp;the&nbsp;derivatives<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;over&nbsp;the&nbsp;training&nbsp;samples&nbsp;in&nbsp;a&nbsp;batch.&nbsp;Hence&nbsp;the&nbsp;need&nbsp;for<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;batch_size&nbsp;as&nbsp;a&nbsp;constructor&nbsp;parameter.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dataset_size:&nbsp;Although&nbsp;the&nbsp;networks&nbsp;created&nbsp;by&nbsp;an&nbsp;arbitrary&nbsp;set&nbsp;of<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;expressions&nbsp;are&nbsp;not&nbsp;likely&nbsp;to&nbsp;allow&nbsp;for&nbsp;any&nbsp;true&nbsp;learning&nbsp;of<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;parameters,&nbsp;nonetheless&nbsp;the&nbsp;ComputationalGraphPrimer<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;allows&nbsp;for&nbsp;the&nbsp;computation&nbsp;of&nbsp;the&nbsp;loss&nbsp;at&nbsp;the&nbsp;output&nbsp;nodes<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;backpropagation&nbsp;of&nbsp;the&nbsp;loss&nbsp;to&nbsp;the&nbsp;other&nbsp;nodes.&nbsp;&nbsp;To<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;demonstrate&nbsp;this,&nbsp;we&nbsp;need&nbsp;a&nbsp;ground-truth&nbsp;set&nbsp;of&nbsp;input/output<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;values&nbsp;for&nbsp;given&nbsp;value&nbsp;for&nbsp;the&nbsp;learnable&nbsp;parameters.&nbsp;&nbsp;The<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;constructor&nbsp;parameter&nbsp;'dataset_size'&nbsp;refers&nbsp;to&nbsp;how&nbsp;may&nbsp;of<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;these&nbsp;'input/output'&nbsp;pairs&nbsp;would&nbsp;be&nbsp;generated&nbsp;for&nbsp;such<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;experiments.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For&nbsp;the&nbsp;one-neuron&nbsp;and&nbsp;multi-neuron&nbsp;demos&nbsp;introduced&nbsp;in<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Version&nbsp;1.0.5,&nbsp;the&nbsp;constructor&nbsp;parameter&nbsp;dataset_size&nbsp;refers<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to&nbsp;many&nbsp;tuples&nbsp;of&nbsp;randomly&nbsp;generated&nbsp;data&nbsp;should&nbsp;be&nbsp;made<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;available&nbsp;for&nbsp;learning.&nbsp;The&nbsp;size&nbsp;of&nbsp;each&nbsp;data&nbsp;tuple&nbsp;is<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;deduced&nbsp;from&nbsp;the&nbsp;the&nbsp;first&nbsp;expression&nbsp;in&nbsp;the&nbsp;list&nbsp;made<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;available&nbsp;to&nbsp;module&nbsp;through&nbsp;the&nbsp;parameter&nbsp;'expressions'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;described&nbsp;below.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;display_loss_how_often:&nbsp;This&nbsp;controls&nbsp;how&nbsp;often&nbsp;you&nbsp;will&nbsp;see&nbsp;the&nbsp;result&nbsp;of<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;calculations&nbsp;being&nbsp;carried&nbsp;out&nbsp;in&nbsp;the&nbsp;computational<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;graph.&nbsp;&nbsp;Let's&nbsp;say&nbsp;you&nbsp;are&nbsp;experimenting&nbsp;with&nbsp;10,000<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input/output&nbsp;samples&nbsp;for&nbsp;propagation&nbsp;in&nbsp;the&nbsp;network,&nbsp;if&nbsp;you<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;set&nbsp;this&nbsp;constructor&nbsp;option&nbsp;to&nbsp;1000,&nbsp;you&nbsp;will&nbsp;see&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;partial&nbsp;derivatives&nbsp;and&nbsp;the&nbsp;values&nbsp;for&nbsp;the&nbsp;learnable<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parameters&nbsp;every&nbsp;1000&nbsp;passes&nbsp;through&nbsp;the&nbsp;graph.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;expressions:&nbsp;These&nbsp;expressions&nbsp;define&nbsp;the&nbsp;computational&nbsp;graph.&nbsp;&nbsp;The<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;expressions&nbsp;are&nbsp;based&nbsp;on&nbsp;the&nbsp;following&nbsp;assumptions:&nbsp;(1)&nbsp;any<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;variable&nbsp;name&nbsp;must&nbsp;start&nbsp;with&nbsp;the&nbsp;letter&nbsp;'x';&nbsp;(2)&nbsp;a&nbsp;symbolic<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name&nbsp;that&nbsp;does&nbsp;not&nbsp;start&nbsp;with&nbsp;'x'&nbsp;is&nbsp;a&nbsp;learnable&nbsp;parameter;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(3)&nbsp;exponentiation&nbsp;operator&nbsp;is&nbsp;'^';&nbsp;(4)&nbsp;the&nbsp;symbols&nbsp;'*',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+',&nbsp;and&nbsp;'-'&nbsp;carry&nbsp;their&nbsp;usual&nbsp;arithmetic&nbsp;meanings.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;grad_delta:&nbsp;This&nbsp;constructor&nbsp;option&nbsp;sets&nbsp;the&nbsp;value&nbsp;of&nbsp;the&nbsp;delta&nbsp;to&nbsp;be&nbsp;used<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;estimating&nbsp;the&nbsp;partial&nbsp;derivatives&nbsp;with&nbsp;the&nbsp;finite<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;difference&nbsp;method.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;layers_config:&nbsp;Introduced&nbsp;in&nbsp;Version&nbsp;1.0.5&nbsp;for&nbsp;the&nbsp;multi-neuron&nbsp;demo.&nbsp;Its<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value&nbsp;is&nbsp;a&nbsp;list&nbsp;of&nbsp;nodes&nbsp;in&nbsp;each&nbsp;layer&nbsp;of&nbsp;the&nbsp;network.&nbsp;Note<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;that&nbsp;I&nbsp;consider&nbsp;the&nbsp;input&nbsp;to&nbsp;the&nbsp;neural&nbsp;network&nbsp;as&nbsp;a&nbsp;layer<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unto&nbsp;itself.&nbsp;&nbsp;Therefore,&nbsp;if&nbsp;the&nbsp;value&nbsp;of&nbsp;the&nbsp;parameter<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;num_layers&nbsp;is&nbsp;3,&nbsp;the&nbsp;list&nbsp;you&nbsp;supply&nbsp;for&nbsp;layers_config&nbsp;must<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;have&nbsp;three&nbsp;numbers&nbsp;in&nbsp;it.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;learning_rate:&nbsp;Carries&nbsp;the&nbsp;usual&nbsp;meaning&nbsp;for&nbsp;updating&nbsp;the&nbsp;values&nbsp;of&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;learnable&nbsp;parameters&nbsp;based&nbsp;on&nbsp;the&nbsp;gradients&nbsp;of&nbsp;the&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output&nbsp;of&nbsp;a&nbsp;layer&nbsp;with&nbsp;respect&nbsp;to&nbsp;those&nbsp;parameters.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;num_layers:&nbsp;Introduced&nbsp;in&nbsp;Version&nbsp;1.0.5&nbsp;for&nbsp;the&nbsp;multi-neuron&nbsp;demo.&nbsp;It<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is&nbsp;merely&nbsp;a&nbsp;convenience&nbsp;parameter&nbsp;that&nbsp;indicated&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;number&nbsp;of&nbsp;layers&nbsp;in&nbsp;your&nbsp;multi-neuron&nbsp;network.&nbsp;For&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;purpose&nbsp;of&nbsp;counting&nbsp;layers,&nbsp;I&nbsp;consider&nbsp;the&nbsp;input&nbsp;as&nbsp;a<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;layer&nbsp;unto&nbsp;itself.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;one_neuron_model:&nbsp;Introduced&nbsp;in&nbsp;Version&nbsp;1.0.5.&nbsp;&nbsp;This&nbsp;boolean&nbsp;parameter&nbsp;is<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;needed&nbsp;only&nbsp;when&nbsp;you&nbsp;are&nbsp;constructing&nbsp;a&nbsp;one-neuron&nbsp;demo.&nbsp;I<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;needed&nbsp;this&nbsp;constructor&nbsp;parameter&nbsp;for&nbsp;some&nbsp;conditional<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;evaluations&nbsp;in&nbsp;the&nbsp;"parse_expressions()"&nbsp;method&nbsp;of&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;module.&nbsp;&nbsp;I&nbsp;use&nbsp;that&nbsp;expression&nbsp;parser&nbsp;for&nbsp;both&nbsp;the&nbsp;older<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;demos&nbsp;and&nbsp;the&nbsp;new&nbsp;demo&nbsp;based&nbsp;on&nbsp;the&nbsp;one-neuron&nbsp;model.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;output_vars:&nbsp;Although&nbsp;the&nbsp;parser&nbsp;has&nbsp;the&nbsp;ability&nbsp;to&nbsp;figure&nbsp;out&nbsp;which&nbsp;nodes<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in&nbsp;the&nbsp;computational&nbsp;graph&nbsp;represent&nbsp;the&nbsp;output&nbsp;variables<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;---&nbsp;these&nbsp;being&nbsp;nodes&nbsp;with&nbsp;no&nbsp;outgoing&nbsp;arcs&nbsp;---&nbsp;you&nbsp;are<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;allowed&nbsp;to&nbsp;designate&nbsp;the&nbsp;specific&nbsp;output&nbsp;variables&nbsp;you&nbsp;are<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;interested&nbsp;in&nbsp;through&nbsp;this&nbsp;constructor&nbsp;parameter.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;training_iterations:&nbsp;Carries&nbsp;the&nbsp;expected&nbsp;meaning.<br>
+&nbsp;<br>
+&nbsp;<br>
+<font size="+2" color="red">PUBLIC&nbsp;METHODS:<br>
+</font>&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(1)&nbsp;&nbsp;backprop_and_update_params_one_neuron_model():<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Introduced&nbsp;in&nbsp;Version&nbsp;1.0.5.&nbsp;&nbsp;This&nbsp;method&nbsp;is&nbsp;called&nbsp;by<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;run_training_loop_one_neuron_model()&nbsp;for&nbsp;backpropagating&nbsp;the&nbsp;loss<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;updating&nbsp;the&nbsp;values&nbsp;of&nbsp;the&nbsp;learnable&nbsp;parameters.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(2)&nbsp;&nbsp;backprop_and_update_params_multi_neuron_model():<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Introduced&nbsp;in&nbsp;Version&nbsp;1.0.5.&nbsp;&nbsp;This&nbsp;method&nbsp;is&nbsp;called&nbsp;by<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;run_training_loop_multi_neuron_model()&nbsp;for&nbsp;backpropagating&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;loss&nbsp;and&nbsp;updating&nbsp;the&nbsp;values&nbsp;of&nbsp;the&nbsp;learnable&nbsp;parameters.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(3)&nbsp;&nbsp;display_network2():<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This&nbsp;method&nbsp;calls&nbsp;on&nbsp;the&nbsp;networkx&nbsp;module&nbsp;to&nbsp;construct&nbsp;a&nbsp;visual<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;display&nbsp;of&nbsp;the&nbsp;computational&nbsp;graph.<br>
+&nbsp;<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(4)&nbsp;&nbsp;forward_propagate_one_input_sample_with_partial_deriv_calc():<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This&nbsp;method&nbsp;is&nbsp;used&nbsp;for&nbsp;pushing&nbsp;the&nbsp;input&nbsp;data&nbsp;forward&nbsp;through&nbsp;a<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;general&nbsp;DAG&nbsp;and&nbsp;at&nbsp;the&nbsp;same&nbsp;computing&nbsp;the&nbsp;partial&nbsp;derivatives&nbsp;that<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;would&nbsp;be&nbsp;needed&nbsp;during&nbsp;backpropagation&nbsp;for&nbsp;updating&nbsp;the&nbsp;values&nbsp;of<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;learnable&nbsp;parameters.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(5)&nbsp;&nbsp;forward_prop_one_neuron_model():<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Introduced&nbsp;in&nbsp;Version&nbsp;1.0.5.&nbsp;&nbsp;This&nbsp;function&nbsp;propagates&nbsp;the&nbsp;input<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data&nbsp;through&nbsp;a&nbsp;one-neuron&nbsp;network.&nbsp;&nbsp;The&nbsp;data&nbsp;aggregated&nbsp;at&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;neuron&nbsp;is&nbsp;subject&nbsp;to&nbsp;a&nbsp;Sigmoid&nbsp;activation.&nbsp;&nbsp;The&nbsp;function&nbsp;also<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;calculates&nbsp;the&nbsp;partial&nbsp;derivatives&nbsp;needed&nbsp;during&nbsp;backprop.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(6)&nbsp;&nbsp;forward_prop_multi_neuron_model():<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Introduced&nbsp;in&nbsp;Version&nbsp;1.0.5.&nbsp;This&nbsp;function&nbsp;does&nbsp;the&nbsp;same&nbsp;thing&nbsp;as<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;previous&nbsp;function,&nbsp;except&nbsp;that&nbsp;it&nbsp;is&nbsp;intended&nbsp;for&nbsp;a&nbsp;multi-layer<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;neural&nbsp;network.&nbsp;The&nbsp;pre-activation&nbsp;values&nbsp;at&nbsp;each&nbsp;neuron&nbsp;are<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;subject&nbsp;to&nbsp;the&nbsp;Sigmoid&nbsp;nonlinearity.&nbsp;At&nbsp;the&nbsp;same&nbsp;time,&nbsp;the&nbsp;partial<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;derivatives&nbsp;are&nbsp;calculated&nbsp;and&nbsp;stored&nbsp;away&nbsp;for&nbsp;use&nbsp;during&nbsp;backprop.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(7)&nbsp;&nbsp;gen_gt_dataset()<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This&nbsp;method&nbsp;generates&nbsp;the&nbsp;training&nbsp;data&nbsp;for&nbsp;a&nbsp;general&nbsp;graph&nbsp;of<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nodes&nbsp;in&nbsp;a&nbsp;DAG.&nbsp;For&nbsp;random&nbsp;values&nbsp;at&nbsp;the&nbsp;input&nbsp;nodes,&nbsp;it<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;calculates&nbsp;the&nbsp;values&nbsp;at&nbsp;the&nbsp;output&nbsp;nodes&nbsp;assuming&nbsp;certain&nbsp;given<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;values&nbsp;for&nbsp;the&nbsp;learnable&nbsp;parameters&nbsp;in&nbsp;the&nbsp;network.&nbsp;If&nbsp;it&nbsp;were<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;possible&nbsp;to&nbsp;carry&nbsp;out&nbsp;learning&nbsp;in&nbsp;such&nbsp;a&nbsp;network,&nbsp;the&nbsp;goal&nbsp;would<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to&nbsp;see&nbsp;if&nbsp;the&nbsp;value&nbsp;of&nbsp;those&nbsp;parameters&nbsp;would&nbsp;be&nbsp;learned<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;automatically&nbsp;as&nbsp;in&nbsp;a&nbsp;neural&nbsp;network.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(8)&nbsp;&nbsp;gen_training_data():<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Introduced&nbsp;in&nbsp;Version&nbsp;1.0.5.&nbsp;This&nbsp;function&nbsp;generates&nbsp;training&nbsp;data<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;the&nbsp;scripts&nbsp;"one_neuron_classifier.py",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"multi_neuron_classifier.py"&nbsp;and&nbsp;"verify_with_torchnn.py"&nbsp;scripts<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in&nbsp;the&nbsp;Examples&nbsp;directory&nbsp;of&nbsp;the&nbsp;distribution.&nbsp;&nbsp;The&nbsp;data<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;corresponds&nbsp;to&nbsp;two&nbsp;classes&nbsp;defined&nbsp;by&nbsp;two&nbsp;different&nbsp;multi-variate<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;distributions.&nbsp;The&nbsp;dimensionality&nbsp;of&nbsp;the&nbsp;data&nbsp;is&nbsp;determined<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;entirely&nbsp;the&nbsp;how&nbsp;many&nbsp;nodes&nbsp;are&nbsp;found&nbsp;by&nbsp;the&nbsp;expression&nbsp;parser&nbsp;in<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;list&nbsp;of&nbsp;expressions&nbsp;that&nbsp;define&nbsp;the&nbsp;network.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(9)&nbsp;&nbsp;parse_expressions()<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This&nbsp;method&nbsp;parses&nbsp;the&nbsp;expressions&nbsp;provided&nbsp;and&nbsp;constructs&nbsp;a&nbsp;DAG<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from&nbsp;them&nbsp;for&nbsp;the&nbsp;variables&nbsp;and&nbsp;the&nbsp;parameters&nbsp;in&nbsp;the&nbsp;expressions.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;It&nbsp;is&nbsp;based&nbsp;on&nbsp;the&nbsp;convention&nbsp;that&nbsp;the&nbsp;names&nbsp;of&nbsp;all&nbsp;variables<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;begin&nbsp;with&nbsp;the&nbsp;character&nbsp;'x',&nbsp;with&nbsp;all&nbsp;other&nbsp;symbolic&nbsp;names&nbsp;being<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;treated&nbsp;as&nbsp;learnable&nbsp;parameters.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(10)&nbsp;parse_multi_layer_expressions():<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Introduced&nbsp;in&nbsp;Version&nbsp;1.0.5.&nbsp;Whereas&nbsp;the&nbsp;previous&nbsp;method,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parse_expressions(),&nbsp;works&nbsp;well&nbsp;for&nbsp;creating&nbsp;a&nbsp;general&nbsp;DAG&nbsp;and&nbsp;for<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;one-neuron&nbsp;model,&nbsp;it&nbsp;is&nbsp;not&nbsp;meant&nbsp;to&nbsp;capture&nbsp;the&nbsp;layer&nbsp;based<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;structure&nbsp;of&nbsp;a&nbsp;neural&nbsp;network.&nbsp;&nbsp;Hence&nbsp;this&nbsp;method.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(11)&nbsp;run_training_loop_one_neuron_model():<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Introduced&nbsp;in&nbsp;Version&nbsp;1.0.5.&nbsp;&nbsp;This&nbsp;is&nbsp;the&nbsp;main&nbsp;function&nbsp;in&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;module&nbsp;for&nbsp;the&nbsp;demo&nbsp;based&nbsp;on&nbsp;the&nbsp;one-neuron&nbsp;model.&nbsp;The&nbsp;demo<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;consists&nbsp;of&nbsp;propagating&nbsp;the&nbsp;input&nbsp;values&nbsp;forward,&nbsp;aggregating&nbsp;them<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;the&nbsp;neuron,&nbsp;and&nbsp;subjecting&nbsp;the&nbsp;result&nbsp;to&nbsp;Sigmoid&nbsp;activation.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;All&nbsp;the&nbsp;partial&nbsp;derivatives&nbsp;needed&nbsp;for&nbsp;updating&nbsp;the&nbsp;link&nbsp;weights<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;are&nbsp;calculating&nbsp;the&nbsp;forward&nbsp;propagation.&nbsp;&nbsp;This&nbsp;includes&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;derivatives&nbsp;of&nbsp;the&nbsp;output&nbsp;vis-a-vis&nbsp;the&nbsp;input&nbsp;at&nbsp;the&nbsp;Sigmoid<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;activation.&nbsp;&nbsp;Subsequently,&nbsp;during&nbsp;backpropagation&nbsp;of&nbsp;the&nbsp;loss,&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parameter&nbsp;values&nbsp;are&nbsp;updated&nbsp;using&nbsp;the&nbsp;derivatives&nbsp;stored&nbsp;away<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;during&nbsp;forward&nbsp;propagation.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(12)&nbsp;run_training_loop_multi_neuron_model()<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Introduced&nbsp;in&nbsp;Version&nbsp;1.0.5.&nbsp;&nbsp;This&nbsp;is&nbsp;the&nbsp;main&nbsp;function&nbsp;for&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;demo&nbsp;based&nbsp;on&nbsp;a&nbsp;multi-layer&nbsp;neural&nbsp;network.&nbsp;&nbsp;As&nbsp;each&nbsp;batch&nbsp;of<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;training&nbsp;data&nbsp;is&nbsp;pushed&nbsp;through&nbsp;the&nbsp;network,&nbsp;the&nbsp;partial&nbsp;derivatives<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of&nbsp;the&nbsp;output&nbsp;at&nbsp;each&nbsp;layer&nbsp;is&nbsp;computed&nbsp;with&nbsp;respect&nbsp;to&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parameters.&nbsp;This&nbsp;calculating&nbsp;includes&nbsp;computing&nbsp;the&nbsp;partial<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;derivatives&nbsp;at&nbsp;the&nbsp;output&nbsp;of&nbsp;the&nbsp;activation&nbsp;function&nbsp;with&nbsp;respect<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to&nbsp;its&nbsp;input.&nbsp;&nbsp;Subsequently,&nbsp;during&nbsp;backpropagation,&nbsp;first<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;batch-based&nbsp;smoothing&nbsp;is&nbsp;applied&nbsp;to&nbsp;the&nbsp;derivatives&nbsp;and&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prediction&nbsp;errors&nbsp;stored&nbsp;away&nbsp;during&nbsp;forward&nbsp;propagation&nbsp;in&nbsp;order<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to&nbsp;comply&nbsp;with&nbsp;the&nbsp;needs&nbsp;of&nbsp;SGD&nbsp;and&nbsp;the&nbsp;values&nbsp;of&nbsp;the&nbsp;learnable<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parameters&nbsp;updated.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(13)&nbsp;run_training_with_torchnn():<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Introduced&nbsp;in&nbsp;Version&nbsp;1.0.5.&nbsp;&nbsp;The&nbsp;purpose&nbsp;of&nbsp;this&nbsp;function&nbsp;is&nbsp;to<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;use&nbsp;comparable&nbsp;network&nbsp;components&nbsp;from&nbsp;the&nbsp;torch.nn&nbsp;module&nbsp;in<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;order&nbsp;to&nbsp;"authenticate"&nbsp;the&nbsp;performance&nbsp;of&nbsp;the&nbsp;handcrafted<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;one-neuron&nbsp;and&nbsp;the&nbsp;multi-neuron&nbsp;models&nbsp;in&nbsp;this&nbsp;module.&nbsp;&nbsp;All&nbsp;that<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is&nbsp;meant&nbsp;by&nbsp;"authentication"&nbsp;here&nbsp;is&nbsp;that&nbsp;if&nbsp;the&nbsp;torch.nn&nbsp;based<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;networks&nbsp;show&nbsp;the&nbsp;training&nbsp;loss&nbsp;decrease&nbsp;with&nbsp;iterations,&nbsp;you<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;would&nbsp;the&nbsp;one-neuron&nbsp;and&nbsp;the&nbsp;multi-neuron&nbsp;models&nbsp;to&nbsp;show&nbsp;similar<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;results.&nbsp;&nbsp;This&nbsp;function&nbsp;contains&nbsp;the&nbsp;following&nbsp;inner&nbsp;classes:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;class&nbsp;OneNeuronNet(&nbsp;torch.nn.Module&nbsp;)<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;class&nbsp;MultiNeuronNet(&nbsp;torch.nn.Module&nbsp;)<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;that&nbsp;define&nbsp;networks&nbsp;similar&nbsp;to&nbsp;the&nbsp;handcrafted&nbsp;one-neuron&nbsp;and<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;multi-neuron&nbsp;networks&nbsp;of&nbsp;this&nbsp;module.<br>
+&nbsp;<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(14)&nbsp;train_on_all_data()<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;purpose&nbsp;of&nbsp;this&nbsp;function&nbsp;is&nbsp;to&nbsp;call&nbsp;forward&nbsp;propagation&nbsp;and<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;backpropagation&nbsp;functions&nbsp;of&nbsp;the&nbsp;module&nbsp;for&nbsp;the&nbsp;demo&nbsp;based&nbsp;on<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;arbitrary&nbsp;DAGs.<br>
+&nbsp;<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(15)&nbsp;plot_loss()<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This&nbsp;is&nbsp;only&nbsp;used&nbsp;by&nbsp;the&nbsp;functions&nbsp;that&nbsp;DAG&nbsp;based&nbsp;demonstration&nbsp;code<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in&nbsp;the&nbsp;module.&nbsp;&nbsp;The&nbsp;training&nbsp;functions&nbsp;introduced&nbsp;in&nbsp;Version&nbsp;1.0.5&nbsp;have<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;embedded&nbsp;code&nbsp;for&nbsp;plotting&nbsp;the&nbsp;loss&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;iterations.<br>
+&nbsp;<br>
+&nbsp;<br>
+<font size="+2" color="red">THE&nbsp;Examples&nbsp;DIRECTORY:<br>
+</font>&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;Examples&nbsp;directory&nbsp;of&nbsp;the&nbsp;distribution&nbsp;contains&nbsp;the&nbsp;following&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;following&nbsp;scripts:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;1.&nbsp;&nbsp;&nbsp;graph_based_dataflow.py<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This&nbsp;demonstrates&nbsp;forward&nbsp;propagation&nbsp;of&nbsp;input&nbsp;data&nbsp;and<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;backpropagation&nbsp;in&nbsp;a&nbsp;general&nbsp;DAG&nbsp;(Directed&nbsp;Acyclic&nbsp;Graph).<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;forward&nbsp;propagation&nbsp;involves&nbsp;estimating&nbsp;the&nbsp;partial<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;derivatives&nbsp;that&nbsp;would&nbsp;subsequently&nbsp;be&nbsp;used&nbsp;for&nbsp;"updating"&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;learnable&nbsp;parameters&nbsp;during&nbsp;backpropagation.&nbsp;&nbsp;Since&nbsp;I&nbsp;have&nbsp;not<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;incorporated&nbsp;any&nbsp;activations&nbsp;in&nbsp;the&nbsp;DAG,&nbsp;you&nbsp;can&nbsp;really&nbsp;not<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;expect&nbsp;any&nbsp;real&nbsp;learning&nbsp;to&nbsp;take&nbsp;place&nbsp;in&nbsp;this&nbsp;demo.&nbsp;&nbsp;The<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;purpose&nbsp;of&nbsp;this&nbsp;demo&nbsp;is&nbsp;just&nbsp;to&nbsp;illustrate&nbsp;what&nbsp;is&nbsp;meant&nbsp;by&nbsp;a<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DAG&nbsp;and&nbsp;how&nbsp;information&nbsp;can&nbsp;flow&nbsp;forwards&nbsp;and&nbsp;backwards&nbsp;in<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;such&nbsp;a&nbsp;network.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;2.&nbsp;&nbsp;&nbsp;one_neuron_classifier.py<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This&nbsp;script&nbsp;demonstrates&nbsp;the&nbsp;one-neuron&nbsp;model&nbsp;in&nbsp;the&nbsp;module.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;goal&nbsp;is&nbsp;to&nbsp;show&nbsp;forward&nbsp;propagation&nbsp;of&nbsp;data&nbsp;through&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;neuron&nbsp;(which&nbsp;includes&nbsp;the&nbsp;Sigmoid&nbsp;activation),&nbsp;while<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;calculating&nbsp;the&nbsp;partial&nbsp;derivatives&nbsp;needed&nbsp;during&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;backpropagation&nbsp;step&nbsp;for&nbsp;updating&nbsp;the&nbsp;parameters.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;3.&nbsp;&nbsp;&nbsp;multi_neuron_classifier.py&nbsp;&nbsp;<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This&nbsp;script&nbsp;generalizes&nbsp;what&nbsp;is&nbsp;demonstrated&nbsp;by&nbsp;the&nbsp;one-neuron<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;model&nbsp;to&nbsp;a&nbsp;multi-layer&nbsp;neural&nbsp;network.&nbsp;&nbsp;This&nbsp;script<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;demonstrates&nbsp;saving&nbsp;the&nbsp;partial-derivative&nbsp;information<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;calculated&nbsp;during&nbsp;the&nbsp;forward&nbsp;propagation&nbsp;through&nbsp;a<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;multi-layer&nbsp;neural&nbsp;network&nbsp;and&nbsp;using&nbsp;that&nbsp;information&nbsp;for<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;backpropagating&nbsp;the&nbsp;loss&nbsp;and&nbsp;for&nbsp;updating&nbsp;the&nbsp;values&nbsp;of&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;learnable&nbsp;parameters.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;4.&nbsp;&nbsp;&nbsp;verify_with_torchnn.py<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;purpose&nbsp;of&nbsp;this&nbsp;script&nbsp;is&nbsp;just&nbsp;to&nbsp;verify&nbsp;that&nbsp;the&nbsp;results<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;obtained&nbsp;with&nbsp;the&nbsp;scripts&nbsp;"one_neuron_classifier.py"&nbsp;and<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"multi_neuron_classifier.py"&nbsp;are&nbsp;along&nbsp;the&nbsp;expected&nbsp;lines.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;That&nbsp;is,&nbsp;if&nbsp;similar&nbsp;networks&nbsp;constructed&nbsp;with&nbsp;the&nbsp;torch.nn<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;module&nbsp;show&nbsp;the&nbsp;training&nbsp;loss&nbsp;decreasing&nbsp;with&nbsp;iterations,&nbsp;you<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;would&nbsp;expect&nbsp;the&nbsp;similar&nbsp;learning&nbsp;behavior&nbsp;from&nbsp;the&nbsp;scripts<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"one_neuron_classifier.py"&nbsp;and&nbsp;"multi_neuron_classifier.py".<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;5.&nbsp;&nbsp;extending_autograd.py<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This&nbsp;provides&nbsp;a&nbsp;demo&nbsp;example&nbsp;of&nbsp;the&nbsp;recommended&nbsp;approach&nbsp;for<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;giving&nbsp;additional&nbsp;functionality&nbsp;to&nbsp;Autograd.&nbsp;&nbsp;See&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;explanation&nbsp;in&nbsp;the&nbsp;doc&nbsp;section&nbsp;associated&nbsp;with&nbsp;the&nbsp;inner<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;class&nbsp;AutogradCustomization&nbsp;of&nbsp;this&nbsp;module&nbsp;for&nbsp;further&nbsp;info.<br>
+&nbsp;<br>
+&nbsp;<br>
+<font size="+2" color="red">BUGS:<br>
+</font>&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Please&nbsp;notify&nbsp;the&nbsp;author&nbsp;if&nbsp;you&nbsp;encounter&nbsp;any&nbsp;bugs.&nbsp;&nbsp;When&nbsp;sending&nbsp;email,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;please&nbsp;place&nbsp;the&nbsp;string&nbsp;'Computational&nbsp;Graph&nbsp;Primer'&nbsp;in&nbsp;the&nbsp;subject&nbsp;line&nbsp;to<br>
+&nbsp;&nbsp;&nbsp;&nbsp;get&nbsp;past&nbsp;the&nbsp;author's&nbsp;spam&nbsp;filter.<br>
+&nbsp;<br>
+&nbsp;<br>
+<font size="+2" color="red">ACKNOWLEDGMENTS:<br>
+</font>&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Akshita&nbsp;Kamsali's&nbsp;help&nbsp;with&nbsp;improving&nbsp;the&nbsp;quality&nbsp;of&nbsp;the&nbsp;network&nbsp;graph<br>
+&nbsp;&nbsp;&nbsp;&nbsp;visualization&nbsp;code&nbsp;is&nbsp;much&nbsp;appreciated.&nbsp;&nbsp;Akshita&nbsp;is&nbsp;working&nbsp;on&nbsp;her&nbsp;Ph.D.&nbsp;&nbsp;in<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Robot&nbsp;Vision&nbsp;Lab&nbsp;at&nbsp;Purdue.<br>
+&nbsp;<br>
+&nbsp;<br>
+<font size="+2" color="red">ABOUT&nbsp;THE&nbsp;AUTHOR:<br>
+</font>&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;author,&nbsp;Avinash&nbsp;Kak,&nbsp;is&nbsp;a&nbsp;professor&nbsp;of&nbsp;Electrical&nbsp;and&nbsp;Computer<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Engineering&nbsp;at&nbsp;Purdue&nbsp;University.&nbsp;&nbsp;For&nbsp;all&nbsp;issues&nbsp;related&nbsp;to&nbsp;this<br>
+&nbsp;&nbsp;&nbsp;&nbsp;module,&nbsp;contact&nbsp;the&nbsp;author&nbsp;at&nbsp;kak@purdue.edu&nbsp;If&nbsp;you&nbsp;send&nbsp;email,&nbsp;please<br>
+&nbsp;&nbsp;&nbsp;&nbsp;place&nbsp;the&nbsp;string&nbsp;"ComputationalGraphPrimer"&nbsp;in&nbsp;your&nbsp;subject&nbsp;line&nbsp;to&nbsp;get<br>
+&nbsp;&nbsp;&nbsp;&nbsp;past&nbsp;the&nbsp;author's&nbsp;spam&nbsp;filter.<br>
+&nbsp;<br>
+<font size="+2" color="red">COPYRIGHT:<br>
+</font>&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Python&nbsp;Software&nbsp;Foundation&nbsp;License<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Copyright&nbsp;2023&nbsp;Avinash&nbsp;Kak<br>
+&nbsp;<br>
+@endofdocs</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="copy.html">copy</a><br>
+<a href="itertools.html">itertools</a><br>
+<a href="math.html">math</a><br>
+</td><td width="25%" valign=top><a href="numpy.html">numpy</a><br>
+<a href="networkx.html">networkx</a><br>
+<a href="operator.html">operator</a><br>
+</td><td width="25%" valign=top><a href="os.html">os</a><br>
+<a href="matplotlib.pyplot.html">matplotlib.pyplot</a><br>
+<a href="random.html">random</a><br>
+</td><td width="25%" valign=top><a href="re.html">re</a><br>
+<a href="sys.html">sys</a><br>
+<a href="torch.html">torch</a><br>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="ComputationalGraphPrimer.html#ComputationalGraphPrimer">ComputationalGraphPrimer</a>
+</font></dt><dt><font face="helvetica, arial"><a href="ComputationalGraphPrimer.html#Exp">Exp</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="ComputationalGraphPrimer">class <strong>ComputationalGraphPrimer</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>ComputationalGraphPrimer(*args,&nbsp;**kwargs)<br>
+&nbsp;<br>
+<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="ComputationalGraphPrimer-__init__"><strong>__init__</strong></a>(self, *args, **kwargs)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<dl><dt><a name="ComputationalGraphPrimer-backprop_and_update_params_multi_neuron_model"><strong>backprop_and_update_params_multi_neuron_model</strong></a>(self, y_error, class_labels)</dt><dd><tt>First&nbsp;note&nbsp;that&nbsp;loop&nbsp;index&nbsp;variable&nbsp;'back_layer_index'&nbsp;starts&nbsp;with&nbsp;the&nbsp;index&nbsp;of<br>
+the&nbsp;last&nbsp;layer.&nbsp;&nbsp;For&nbsp;the&nbsp;3-layer&nbsp;example&nbsp;shown&nbsp;for&nbsp;'forward',&nbsp;back_layer_index<br>
+starts&nbsp;with&nbsp;a&nbsp;value&nbsp;of&nbsp;2,&nbsp;its&nbsp;next&nbsp;value&nbsp;is&nbsp;1,&nbsp;and&nbsp;that's&nbsp;it.<br>
+&nbsp;<br>
+Stochastic&nbsp;Gradient&nbsp;Gradient&nbsp;calls&nbsp;for&nbsp;the&nbsp;backpropagated&nbsp;loss&nbsp;to&nbsp;be&nbsp;averaged&nbsp;over<br>
+the&nbsp;samples&nbsp;in&nbsp;a&nbsp;batch.&nbsp;&nbsp;To&nbsp;explain&nbsp;how&nbsp;this&nbsp;averaging&nbsp;is&nbsp;carried&nbsp;out&nbsp;by&nbsp;the<br>
+backprop&nbsp;function,&nbsp;consider&nbsp;the&nbsp;last&nbsp;node&nbsp;on&nbsp;the&nbsp;example&nbsp;shown&nbsp;in&nbsp;the&nbsp;forward()<br>
+function&nbsp;above.&nbsp;&nbsp;Standing&nbsp;at&nbsp;the&nbsp;node,&nbsp;we&nbsp;look&nbsp;at&nbsp;the&nbsp;'input'&nbsp;values&nbsp;stored&nbsp;in&nbsp;the<br>
+variable&nbsp;"input_vals".&nbsp;&nbsp;Assuming&nbsp;a&nbsp;batch&nbsp;size&nbsp;of&nbsp;8,&nbsp;this&nbsp;will&nbsp;be&nbsp;list&nbsp;of<br>
+lists.&nbsp;Each&nbsp;of&nbsp;the&nbsp;inner&nbsp;lists&nbsp;will&nbsp;have&nbsp;two&nbsp;values&nbsp;for&nbsp;the&nbsp;two&nbsp;nodes&nbsp;in&nbsp;the<br>
+hidden&nbsp;layer.&nbsp;And&nbsp;there&nbsp;will&nbsp;be&nbsp;8&nbsp;of&nbsp;these&nbsp;for&nbsp;the&nbsp;8&nbsp;elements&nbsp;of&nbsp;the&nbsp;batch.&nbsp;&nbsp;We&nbsp;average<br>
+these&nbsp;values&nbsp;'input&nbsp;vals'&nbsp;and&nbsp;store&nbsp;those&nbsp;in&nbsp;the&nbsp;variable&nbsp;"input_vals_avg".&nbsp;&nbsp;Next&nbsp;we<br>
+must&nbsp;carry&nbsp;out&nbsp;the&nbsp;same&nbsp;batch-based&nbsp;averaging&nbsp;for&nbsp;the&nbsp;partial&nbsp;derivatives&nbsp;stored&nbsp;in&nbsp;the<br>
+variable&nbsp;"deriv_sigmoid".<br>
+&nbsp;<br>
+Pay&nbsp;attention&nbsp;to&nbsp;the&nbsp;variable&nbsp;'vars_in_layer'.&nbsp;&nbsp;These&nbsp;store&nbsp;the&nbsp;node&nbsp;variables&nbsp;in<br>
+the&nbsp;current&nbsp;layer&nbsp;during&nbsp;backpropagation.&nbsp;&nbsp;Since&nbsp;back_layer_index&nbsp;starts&nbsp;with&nbsp;a<br>
+value&nbsp;of&nbsp;2,&nbsp;the&nbsp;variable&nbsp;'vars_in_layer'&nbsp;will&nbsp;have&nbsp;just&nbsp;the&nbsp;single&nbsp;node&nbsp;for&nbsp;the<br>
+example&nbsp;shown&nbsp;for&nbsp;forward().&nbsp;With&nbsp;respect&nbsp;to&nbsp;what&nbsp;is&nbsp;stored&nbsp;in&nbsp;vars_in_layer',&nbsp;the<br>
+variables&nbsp;stored&nbsp;in&nbsp;'input_vars_to_layer'&nbsp;correspond&nbsp;to&nbsp;the&nbsp;input&nbsp;layer&nbsp;with<br>
+respect&nbsp;to&nbsp;the&nbsp;current&nbsp;layer.</tt></dd></dl>
+
+<dl><dt><a name="ComputationalGraphPrimer-backprop_and_update_params_one_neuron_model"><strong>backprop_and_update_params_one_neuron_model</strong></a>(self, y_error, vals_for_input_vars, deriv_sigmoid)</dt><dd><tt>As&nbsp;should&nbsp;be&nbsp;evident&nbsp;from&nbsp;the&nbsp;syntax&nbsp;used&nbsp;in&nbsp;the&nbsp;following&nbsp;call&nbsp;to&nbsp;backprop&nbsp;function,<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;self.<a href="#ComputationalGraphPrimer-backprop_and_update_params_one_neuron_model">backprop_and_update_params_one_neuron_model</a>(&nbsp;y_error_avg,&nbsp;data_tuple_avg,&nbsp;deriv_sigmoid_avg)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^^^&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^^^&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^^^<br>
+the&nbsp;values&nbsp;fed&nbsp;to&nbsp;the&nbsp;backprop&nbsp;function&nbsp;for&nbsp;its&nbsp;three&nbsp;arguments&nbsp;are&nbsp;averaged&nbsp;over&nbsp;the&nbsp;training&nbsp;<br>
+samples&nbsp;in&nbsp;the&nbsp;batch.&nbsp;&nbsp;This&nbsp;in&nbsp;keeping&nbsp;with&nbsp;the&nbsp;spirit&nbsp;of&nbsp;SGD&nbsp;that&nbsp;calls&nbsp;for&nbsp;averaging&nbsp;the&nbsp;<br>
+information&nbsp;retained&nbsp;in&nbsp;the&nbsp;forward&nbsp;propagation&nbsp;over&nbsp;the&nbsp;samples&nbsp;in&nbsp;a&nbsp;batch.<br>
+&nbsp;<br>
+See&nbsp;Slide&nbsp;59&nbsp;of&nbsp;my&nbsp;Week&nbsp;3&nbsp;slides&nbsp;for&nbsp;the&nbsp;math&nbsp;of&nbsp;back&nbsp;propagation&nbsp;for&nbsp;the&nbsp;One-Neuron&nbsp;network.</tt></dd></dl>
+
+<dl><dt><a name="ComputationalGraphPrimer-calculate_loss"><strong>calculate_loss</strong></a>(self, predicted_val, true_val)</dt><dd><tt>######################################################################################################<br>
+######################################&nbsp;&nbsp;Utility&nbsp;Functions&nbsp;############################################</tt></dd></dl>
+
+<dl><dt><a name="ComputationalGraphPrimer-display_DAG"><strong>display_DAG</strong></a>(self)</dt><dd><tt>The&nbsp;network&nbsp;visualization&nbsp;code&nbsp;in&nbsp;this&nbsp;script&nbsp;should&nbsp;work&nbsp;for&nbsp;any&nbsp;general&nbsp;DAG&nbsp;defined&nbsp;in&nbsp;<br>
+an&nbsp;instance&nbsp;of&nbsp;CGP.&nbsp;&nbsp;For&nbsp;an&nbsp;example,&nbsp;see&nbsp;the&nbsp;script<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;graph_based_dataflow.py<br>
+&nbsp;<br>
+in&nbsp;the&nbsp;Examples&nbsp;directory&nbsp;of&nbsp;the&nbsp;module.</tt></dd></dl>
+
+<dl><dt><a name="ComputationalGraphPrimer-display_multi_neuron_network"><strong>display_multi_neuron_network</strong></a>(self)</dt><dd><tt>In&nbsp;version&nbsp;1.1.0,&nbsp;I&nbsp;made&nbsp;this&nbsp;network&nbsp;visualization&nbsp;more&nbsp;general&nbsp;and&nbsp;(if&nbsp;it&nbsp;has&nbsp;no&nbsp;bugs)&nbsp;it&nbsp;should<br>
+work&nbsp;with&nbsp;any&nbsp;multi-layer&nbsp;network&nbsp;graph,&nbsp;such&nbsp;as&nbsp;the&nbsp;one&nbsp;shown&nbsp;in<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;multi_neuron_classifier.py<br>
+&nbsp;<br>
+in&nbsp;the&nbsp;Examples&nbsp;directory&nbsp;of&nbsp;the&nbsp;module.</tt></dd></dl>
+
+<dl><dt><a name="ComputationalGraphPrimer-display_network1"><strong>display_network1</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ComputationalGraphPrimer-display_network2"><strong>display_network2</strong></a>(self)</dt><dd><tt>Provides&nbsp;a&nbsp;fancier&nbsp;display&nbsp;of&nbsp;the&nbsp;network&nbsp;graph</tt></dd></dl>
+
+<dl><dt><a name="ComputationalGraphPrimer-display_one_neuron_network"><strong>display_one_neuron_network</strong></a>(self)</dt><dd><tt>In&nbsp;version&nbsp;1.1.0,&nbsp;I&nbsp;generalized&nbsp;this&nbsp;code&nbsp;to&nbsp;work&nbsp;on&nbsp;any&nbsp;one-neuron&nbsp;network&nbsp;as&nbsp;defined&nbsp;in&nbsp;the<br>
+example:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;one_neuron_classifier.py<br>
+&nbsp;<br>
+in&nbsp;the&nbsp;Examples&nbsp;directory&nbsp;of&nbsp;the&nbsp;module.</tt></dd></dl>
+
+<dl><dt><a name="ComputationalGraphPrimer-eval_expression"><strong>eval_expression</strong></a>(self, exp, vals_for_vars, vals_for_learnable_params, ind_vars=None)</dt></dl>
+
+<dl><dt><a name="ComputationalGraphPrimer-forward_prop_multi_neuron_model"><strong>forward_prop_multi_neuron_model</strong></a>(self, data_tuples_in_batch)</dt><dd><tt>During&nbsp;forward&nbsp;propagation,&nbsp;we&nbsp;push&nbsp;each&nbsp;batch&nbsp;of&nbsp;the&nbsp;input&nbsp;data&nbsp;through&nbsp;the<br>
+network.&nbsp;&nbsp;In&nbsp;order&nbsp;to&nbsp;explain&nbsp;the&nbsp;logic&nbsp;of&nbsp;forward,&nbsp;consider&nbsp;the&nbsp;following&nbsp;network<br>
+layout&nbsp;in&nbsp;4&nbsp;nodes&nbsp;in&nbsp;the&nbsp;input&nbsp;layer,&nbsp;2&nbsp;nodes&nbsp;in&nbsp;the&nbsp;hidden&nbsp;layer,&nbsp;and&nbsp;1&nbsp;node&nbsp;in<br>
+the&nbsp;output&nbsp;layer.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;=&nbsp;node<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;=&nbsp;sigmoid&nbsp;activation<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x|<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x|&nbsp;&nbsp;&nbsp;<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;layer_0&nbsp;&nbsp;&nbsp;&nbsp;layer_1&nbsp;&nbsp;&nbsp;&nbsp;layer_2<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+In&nbsp;the&nbsp;code&nbsp;shown&nbsp;below,&nbsp;the&nbsp;expressions&nbsp;to&nbsp;evaluate&nbsp;for&nbsp;computing&nbsp;the<br>
+pre-activation&nbsp;values&nbsp;at&nbsp;a&nbsp;node&nbsp;are&nbsp;stored&nbsp;at&nbsp;the&nbsp;layer&nbsp;in&nbsp;which&nbsp;the&nbsp;nodes&nbsp;reside.<br>
+That&nbsp;is,&nbsp;the&nbsp;dictionary&nbsp;look-up&nbsp;"self.<strong>layer_exp_objects</strong>[layer_index]"&nbsp;returns&nbsp;the<br>
+Expression&nbsp;objects&nbsp;for&nbsp;which&nbsp;the&nbsp;left-side&nbsp;dependent&nbsp;variable&nbsp;is&nbsp;in&nbsp;the&nbsp;layer<br>
+pointed&nbsp;to&nbsp;layer_index.&nbsp;&nbsp;So&nbsp;the&nbsp;example&nbsp;shown&nbsp;above,&nbsp;"self.<strong>layer_exp_objects</strong>[1]"<br>
+will&nbsp;return&nbsp;two&nbsp;Expression&nbsp;objects,&nbsp;one&nbsp;for&nbsp;each&nbsp;of&nbsp;the&nbsp;two&nbsp;nodes&nbsp;in&nbsp;the&nbsp;second<br>
+layer&nbsp;of&nbsp;the&nbsp;network&nbsp;(that&nbsp;is,&nbsp;layer&nbsp;indexed&nbsp;1).<br>
+&nbsp;<br>
+The&nbsp;pre-activation&nbsp;values&nbsp;obtained&nbsp;by&nbsp;evaluating&nbsp;the&nbsp;expressions&nbsp;at&nbsp;each&nbsp;node&nbsp;are<br>
+then&nbsp;subject&nbsp;to&nbsp;Sigmoid&nbsp;activation,&nbsp;followed&nbsp;by&nbsp;the&nbsp;calculation&nbsp;of&nbsp;the&nbsp;partial<br>
+derivative&nbsp;of&nbsp;the&nbsp;output&nbsp;of&nbsp;the&nbsp;Sigmoid&nbsp;function&nbsp;with&nbsp;respect&nbsp;to&nbsp;its&nbsp;input.<br>
+&nbsp;<br>
+In&nbsp;the&nbsp;forward,&nbsp;the&nbsp;values&nbsp;calculated&nbsp;for&nbsp;the&nbsp;nodes&nbsp;in&nbsp;each&nbsp;layer&nbsp;are&nbsp;stored&nbsp;in<br>
+the&nbsp;dictionary<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.<strong>forw_prop_vals_at_layers</strong>[&nbsp;layer_index&nbsp;]<br>
+&nbsp;<br>
+and&nbsp;the&nbsp;gradients&nbsp;values&nbsp;calculated&nbsp;at&nbsp;the&nbsp;same&nbsp;nodes&nbsp;in&nbsp;the&nbsp;dictionary:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.<strong>gradient_vals_for_layers</strong>[&nbsp;layer_index&nbsp;]</tt></dd></dl>
+
+<dl><dt><a name="ComputationalGraphPrimer-forward_prop_one_neuron_model"><strong>forward_prop_one_neuron_model</strong></a>(self, data_tuples_in_batch)</dt><dd><tt>Forward&nbsp;propagates&nbsp;the&nbsp;batch&nbsp;data&nbsp;through&nbsp;the&nbsp;neural&nbsp;network&nbsp;according&nbsp;to&nbsp;the&nbsp;equations&nbsp;on<br>
+Slide&nbsp;50&nbsp;of&nbsp;my&nbsp;Week&nbsp;3&nbsp;slides.<br>
+&nbsp;<br>
+As&nbsp;the&nbsp;one-neuron&nbsp;model&nbsp;is&nbsp;characterized&nbsp;by&nbsp;a&nbsp;single&nbsp;expression,&nbsp;the&nbsp;main&nbsp;job&nbsp;of&nbsp;this&nbsp;function&nbsp;is<br>
+to&nbsp;evaluate&nbsp;that&nbsp;expression&nbsp;for&nbsp;each&nbsp;data&nbsp;tuple&nbsp;in&nbsp;the&nbsp;incoming&nbsp;batch.&nbsp;&nbsp;The&nbsp;resulting&nbsp;output&nbsp;is<br>
+fed&nbsp;into&nbsp;the&nbsp;sigmoid&nbsp;activation&nbsp;function&nbsp;and&nbsp;the&nbsp;partial&nbsp;derivative&nbsp;of&nbsp;the&nbsp;sigmoid&nbsp;with&nbsp;respect<br>
+to&nbsp;its&nbsp;input&nbsp;calculated.</tt></dd></dl>
+
+<dl><dt><a name="ComputationalGraphPrimer-forward_propagate_one_input_sample_with_partial_deriv_calc"><strong>forward_propagate_one_input_sample_with_partial_deriv_calc</strong></a>(self, sample_index, input_vals_for_ind_vars)</dt><dd><tt>If&nbsp;you&nbsp;want&nbsp;to&nbsp;look&nbsp;at&nbsp;how&nbsp;the&nbsp;information&nbsp;flows&nbsp;in&nbsp;the&nbsp;DAG&nbsp;when&nbsp;you&nbsp;don't&nbsp;have&nbsp;to&nbsp;worry&nbsp;about<br>
+estimating&nbsp;the&nbsp;partial&nbsp;derivatives,&nbsp;see&nbsp;the&nbsp;method&nbsp;<a href="#ComputationalGraphPrimer-gen_gt_dataset">gen_gt_dataset</a>().&nbsp;&nbsp;As&nbsp;you&nbsp;will&nbsp;notice&nbsp;in&nbsp;the<br>
+implementation&nbsp;code&nbsp;for&nbsp;that&nbsp;method,&nbsp;there&nbsp;is&nbsp;nothing&nbsp;much&nbsp;to&nbsp;pushing&nbsp;the&nbsp;input&nbsp;values&nbsp;through<br>
+the&nbsp;nodes&nbsp;and&nbsp;the&nbsp;arcs&nbsp;of&nbsp;a&nbsp;computational&nbsp;graph&nbsp;if&nbsp;we&nbsp;are&nbsp;not&nbsp;concerned&nbsp;about&nbsp;estimating&nbsp;the<br>
+partial&nbsp;derivatives.<br>
+&nbsp;<br>
+On&nbsp;the&nbsp;other&nbsp;hand,&nbsp;if&nbsp;you&nbsp;want&nbsp;to&nbsp;see&nbsp;how&nbsp;one&nbsp;might&nbsp;also&nbsp;estimate&nbsp;the&nbsp;partial&nbsp;derivatives&nbsp;as<br>
+during&nbsp;the&nbsp;forward&nbsp;flow&nbsp;of&nbsp;information&nbsp;in&nbsp;a&nbsp;computational&nbsp;graph,&nbsp;the&nbsp;forward_propagate...()<br>
+presented&nbsp;here&nbsp;is&nbsp;the&nbsp;method&nbsp;to&nbsp;examine.&nbsp;&nbsp;We&nbsp;first&nbsp;split&nbsp;the&nbsp;expression&nbsp;that&nbsp;the&nbsp;node&nbsp;<br>
+variable&nbsp;depends&nbsp;on&nbsp;into&nbsp;its&nbsp;constituent&nbsp;parts&nbsp;on&nbsp;the&nbsp;basis&nbsp;of&nbsp;'+'&nbsp;and&nbsp;'-'&nbsp;operators&nbsp;and<br>
+subsequently,&nbsp;for&nbsp;each&nbsp;part,&nbsp;we&nbsp;estimate&nbsp;the&nbsp;partial&nbsp;of&nbsp;the&nbsp;node&nbsp;variable&nbsp;with&nbsp;respect<br>
+to&nbsp;the&nbsp;variables&nbsp;and&nbsp;the&nbsp;learnable&nbsp;parameters&nbsp;in&nbsp;that&nbsp;part.<br>
+&nbsp;<br>
+The&nbsp;needed&nbsp;partial&nbsp;derivatives&nbsp;are&nbsp;all&nbsp;calculated&nbsp;using&nbsp;the&nbsp;finite&nbsp;difference&nbsp;method&nbsp;in&nbsp;which<br>
+you&nbsp;add&nbsp;a&nbsp;small&nbsp;grad_delta&nbsp;value&nbsp;to&nbsp;the&nbsp;value&nbsp;of&nbsp;the&nbsp;variable&nbsp;with&nbsp;respect&nbsp;to&nbsp;which&nbsp;you&nbsp;are&nbsp;<br>
+calculating&nbsp;the&nbsp;partial&nbsp;and&nbsp;you&nbsp;then&nbsp;estimate&nbsp;the&nbsp;resulting&nbsp;change&nbsp;at&nbsp;the&nbsp;node&nbsp;in&nbsp;question.<br>
+The&nbsp;change&nbsp;divided&nbsp;by&nbsp;grad_delta&nbsp;is&nbsp;the&nbsp;partial&nbsp;derivative&nbsp;you&nbsp;are&nbsp;looking&nbsp;for.</tt></dd></dl>
+
+<dl><dt><a name="ComputationalGraphPrimer-gen_gt_dataset"><strong>gen_gt_dataset</strong></a>(self, vals_for_learnable_params={})</dt><dd><tt>This&nbsp;method&nbsp;illustrates&nbsp;that&nbsp;it&nbsp;is&nbsp;trivial&nbsp;to&nbsp;forward-propagate&nbsp;the&nbsp;information&nbsp;through<br>
+the&nbsp;computational&nbsp;graph&nbsp;if&nbsp;you&nbsp;are&nbsp;not&nbsp;concerned&nbsp;about&nbsp;estimating&nbsp;the&nbsp;partial&nbsp;derivatives<br>
+at&nbsp;the&nbsp;same&nbsp;time.&nbsp;&nbsp;This&nbsp;method&nbsp;is&nbsp;used&nbsp;to&nbsp;generate&nbsp;'dataset_size'&nbsp;number&nbsp;of&nbsp;input/output<br>
+values&nbsp;for&nbsp;the&nbsp;computational&nbsp;graph&nbsp;for&nbsp;given&nbsp;values&nbsp;for&nbsp;the&nbsp;learnable&nbsp;parameters.</tt></dd></dl>
+
+<dl><dt><a name="ComputationalGraphPrimer-gen_gt_dataset_with_activations"><strong>gen_gt_dataset_with_activations</strong></a>(self, vals_for_learnable_params={})</dt><dd><tt>This&nbsp;method&nbsp;illustrates&nbsp;that&nbsp;it&nbsp;is&nbsp;trivial&nbsp;to&nbsp;forward-propagate&nbsp;the&nbsp;information&nbsp;through<br>
+the&nbsp;computational&nbsp;graph&nbsp;if&nbsp;you&nbsp;are&nbsp;not&nbsp;concerned&nbsp;about&nbsp;estimating&nbsp;the&nbsp;partial&nbsp;derivatives<br>
+at&nbsp;the&nbsp;same&nbsp;time.&nbsp;&nbsp;This&nbsp;method&nbsp;is&nbsp;used&nbsp;to&nbsp;generate&nbsp;'dataset_size'&nbsp;number&nbsp;of&nbsp;input/output<br>
+values&nbsp;for&nbsp;the&nbsp;computational&nbsp;graph&nbsp;for&nbsp;given&nbsp;values&nbsp;for&nbsp;the&nbsp;learnable&nbsp;parameters.</tt></dd></dl>
+
+<dl><dt><a name="ComputationalGraphPrimer-gen_training_data"><strong>gen_training_data</strong></a>(self)</dt><dd><tt>This&nbsp;2-class&nbsp;dataset&nbsp;is&nbsp;used&nbsp;for&nbsp;the&nbsp;demos&nbsp;in&nbsp;the&nbsp;following&nbsp;Examples&nbsp;directory&nbsp;scripts:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;one_neuron_classifier.py<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;multi_neuron_classifier.py<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;multi_neuron_classifier.py<br>
+&nbsp;<br>
+The&nbsp;classes&nbsp;are&nbsp;labeled&nbsp;0&nbsp;and&nbsp;1.&nbsp;&nbsp;All&nbsp;of&nbsp;the&nbsp;data&nbsp;for&nbsp;class&nbsp;0&nbsp;is&nbsp;simply&nbsp;a&nbsp;list&nbsp;of&nbsp;<br>
+numbers&nbsp;associated&nbsp;with&nbsp;the&nbsp;key&nbsp;0.&nbsp;&nbsp;Similarly&nbsp;all&nbsp;the&nbsp;data&nbsp;for&nbsp;class&nbsp;1&nbsp;is&nbsp;another&nbsp;list&nbsp;of<br>
+numbers&nbsp;associated&nbsp;with&nbsp;the&nbsp;key&nbsp;1.&nbsp;&nbsp;<br>
+&nbsp;<br>
+For&nbsp;each&nbsp;class,&nbsp;the&nbsp;dataset&nbsp;starts&nbsp;out&nbsp;as&nbsp;being&nbsp;standard&nbsp;normal&nbsp;(zero&nbsp;mean&nbsp;and&nbsp;unit&nbsp;variance)<br>
+to&nbsp;which&nbsp;we&nbsp;add&nbsp;a&nbsp;mean&nbsp;value&nbsp;of&nbsp;2.0&nbsp;for&nbsp;class&nbsp;0&nbsp;and&nbsp;we&nbsp;add&nbsp;mean&nbsp;value&nbsp;of&nbsp;4&nbsp;to&nbsp;the&nbsp;square&nbsp;of<br>
+the&nbsp;original&nbsp;numbers&nbsp;for&nbsp;class&nbsp;1.</tt></dd></dl>
+
+<dl><dt><a name="ComputationalGraphPrimer-parse_expressions"><strong>parse_expressions</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;creates&nbsp;a&nbsp;DAG&nbsp;from&nbsp;a&nbsp;set&nbsp;of&nbsp;expressions&nbsp;that&nbsp;involve&nbsp;variables&nbsp;and&nbsp;learnable<br>
+parameters.&nbsp;The&nbsp;expressions&nbsp;are&nbsp;based&nbsp;on&nbsp;the&nbsp;assumption&nbsp;that&nbsp;a&nbsp;symbolic&nbsp;name&nbsp;that&nbsp;starts<br>
+with&nbsp;the&nbsp;letter&nbsp;'x'&nbsp;is&nbsp;a&nbsp;variable,&nbsp;with&nbsp;all&nbsp;other&nbsp;symbolic&nbsp;names&nbsp;being&nbsp;learnable&nbsp;parameters.<br>
+The&nbsp;computational&nbsp;graph&nbsp;is&nbsp;represented&nbsp;by&nbsp;two&nbsp;dictionaries,&nbsp;'depends_on'&nbsp;and&nbsp;'leads_to'.<br>
+To&nbsp;illustrate&nbsp;the&nbsp;meaning&nbsp;of&nbsp;the&nbsp;dictionaries,&nbsp;something&nbsp;like&nbsp;"depends_on['xz']"&nbsp;would&nbsp;be<br>
+set&nbsp;to&nbsp;a&nbsp;list&nbsp;of&nbsp;all&nbsp;other&nbsp;variables&nbsp;whose&nbsp;outgoing&nbsp;arcs&nbsp;end&nbsp;in&nbsp;the&nbsp;node&nbsp;'xz'.&nbsp;&nbsp;So&nbsp;<br>
+something&nbsp;like&nbsp;"depends_on['xz']"&nbsp;is&nbsp;best&nbsp;read&nbsp;as&nbsp;"node&nbsp;'xz'&nbsp;depends&nbsp;on&nbsp;...."&nbsp;where&nbsp;the<br>
+dots&nbsp;stand&nbsp;for&nbsp;the&nbsp;array&nbsp;of&nbsp;nodes&nbsp;that&nbsp;is&nbsp;the&nbsp;value&nbsp;of&nbsp;"depends_on['xz']".&nbsp;&nbsp;On&nbsp;the&nbsp;other<br>
+hand,&nbsp;the&nbsp;'leads_to'&nbsp;dictionary&nbsp;has&nbsp;the&nbsp;opposite&nbsp;meaning.&nbsp;&nbsp;That&nbsp;is,&nbsp;something&nbsp;like<br>
+"leads_to['xz']"&nbsp;is&nbsp;set&nbsp;to&nbsp;the&nbsp;array&nbsp;of&nbsp;nodes&nbsp;at&nbsp;the&nbsp;ends&nbsp;of&nbsp;all&nbsp;the&nbsp;arcs&nbsp;that&nbsp;emanate<br>
+from&nbsp;'xz'.</tt></dd></dl>
+
+<dl><dt><a name="ComputationalGraphPrimer-parse_general_dag_expressions"><strong>parse_general_dag_expressions</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;is&nbsp;a&nbsp;modification&nbsp;of&nbsp;the&nbsp;previous&nbsp;expression&nbsp;parser&nbsp;and&nbsp;meant&nbsp;specifically<br>
+for&nbsp;the&nbsp;case&nbsp;when&nbsp;a&nbsp;given&nbsp;set&nbsp;of&nbsp;expressions&nbsp;are&nbsp;supposed&nbsp;to&nbsp;define&nbsp;a&nbsp;general&nbsp;DAG.&nbsp;The<br>
+naming&nbsp;conventions&nbsp;for&nbsp;the&nbsp;variables,&nbsp;which&nbsp;designate&nbsp;&nbsp;the&nbsp;nodes&nbsp;in&nbsp;the&nbsp;layers<br>
+of&nbsp;the&nbsp;network,&nbsp;and&nbsp;the&nbsp;learnable&nbsp;parameters&nbsp;remain&nbsp;the&nbsp;same&nbsp;as&nbsp;in&nbsp;the&nbsp;previous&nbsp;function.</tt></dd></dl>
+
+<dl><dt><a name="ComputationalGraphPrimer-parse_multi_layer_expressions"><strong>parse_multi_layer_expressions</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;is&nbsp;a&nbsp;modification&nbsp;of&nbsp;the&nbsp;previous&nbsp;expression&nbsp;parser&nbsp;and&nbsp;meant&nbsp;specifically<br>
+for&nbsp;the&nbsp;case&nbsp;when&nbsp;a&nbsp;given&nbsp;set&nbsp;of&nbsp;expressions&nbsp;are&nbsp;supposed&nbsp;to&nbsp;define&nbsp;a&nbsp;multi-layer&nbsp;neural<br>
+network.&nbsp;&nbsp;The&nbsp;naming&nbsp;conventions&nbsp;for&nbsp;the&nbsp;variables,&nbsp;which&nbsp;designate&nbsp;&nbsp;the&nbsp;nodes&nbsp;in&nbsp;the&nbsp;layers<br>
+of&nbsp;the&nbsp;network,&nbsp;and&nbsp;the&nbsp;learnable&nbsp;parameters&nbsp;remain&nbsp;the&nbsp;same&nbsp;as&nbsp;in&nbsp;the&nbsp;previous&nbsp;function.</tt></dd></dl>
+
+<dl><dt><a name="ComputationalGraphPrimer-plot_loss"><strong>plot_loss</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ComputationalGraphPrimer-run_training_loop_multi_neuron_model"><strong>run_training_loop_multi_neuron_model</strong></a>(self, training_data)</dt><dd><tt>######################################################################################################<br>
+########################################&nbsp;multi&nbsp;neuron&nbsp;model&nbsp;##########################################</tt></dd></dl>
+
+<dl><dt><a name="ComputationalGraphPrimer-run_training_loop_one_neuron_model"><strong>run_training_loop_one_neuron_model</strong></a>(self, training_data)</dt><dd><tt>The&nbsp;training&nbsp;loop&nbsp;must&nbsp;first&nbsp;initialize&nbsp;the&nbsp;learnable&nbsp;parameters.&nbsp;&nbsp;Remember,&nbsp;these&nbsp;are&nbsp;the&nbsp;<br>
+symbolic&nbsp;names&nbsp;in&nbsp;your&nbsp;input&nbsp;expressions&nbsp;for&nbsp;the&nbsp;neural&nbsp;layer&nbsp;that&nbsp;do&nbsp;not&nbsp;begin&nbsp;with&nbsp;the&nbsp;<br>
+letter&nbsp;'x'.&nbsp;&nbsp;In&nbsp;this&nbsp;case,&nbsp;we&nbsp;are&nbsp;initializing&nbsp;with&nbsp;random&nbsp;numbers&nbsp;from&nbsp;a&nbsp;uniform&nbsp;distribution&nbsp;<br>
+over&nbsp;the&nbsp;interval&nbsp;(0,1).</tt></dd></dl>
+
+<dl><dt><a name="ComputationalGraphPrimer-run_training_with_torchnn"><strong>run_training_with_torchnn</strong></a>(self, option, training_data)</dt><dd><tt>The&nbsp;value&nbsp;of&nbsp;the&nbsp;parameter&nbsp;'option'&nbsp;must&nbsp;be&nbsp;either&nbsp;'one_neuron'&nbsp;or&nbsp;'multi_neuron'.<br>
+&nbsp;<br>
+For&nbsp;either&nbsp;option,&nbsp;the&nbsp;number&nbsp;of&nbsp;input&nbsp;nodes&nbsp;is&nbsp;specified&nbsp;by&nbsp;the&nbsp;expressions&nbsp;specified&nbsp;in&nbsp;the&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+constructor&nbsp;of&nbsp;the&nbsp;class&nbsp;ComputationalGraphPrimer.<br>
+&nbsp;<br>
+When&nbsp;the&nbsp;option&nbsp;value&nbsp;is&nbsp;'one_neuron',&nbsp;we&nbsp;use&nbsp;the&nbsp;OneNeuronNet&nbsp;for&nbsp;the&nbsp;learning&nbsp;network&nbsp;and<br>
+when&nbsp;the&nbsp;option&nbsp;is&nbsp;'multi_neuron'&nbsp;we&nbsp;use&nbsp;the&nbsp;MultiNeuronNet.<br>
+&nbsp;<br>
+Assuming&nbsp;that&nbsp;the&nbsp;number&nbsp;of&nbsp;input&nbsp;nodes&nbsp;specified&nbsp;by&nbsp;the&nbsp;expressions&nbsp;is&nbsp;4,&nbsp;the&nbsp;MultiNeuronNet&nbsp;<br>
+class&nbsp;creates&nbsp;the&nbsp;following&nbsp;network&nbsp;layout&nbsp;in&nbsp;which&nbsp;we&nbsp;have&nbsp;2&nbsp;nodes&nbsp;in&nbsp;the&nbsp;hidden&nbsp;layer&nbsp;and&nbsp;<br>
+one&nbsp;node&nbsp;for&nbsp;the&nbsp;final&nbsp;output:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;=&nbsp;node<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;=&nbsp;ReLU&nbsp;activation<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x|<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x|&nbsp;&nbsp;&nbsp;<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;layer_0&nbsp;&nbsp;&nbsp;&nbsp;layer_1&nbsp;&nbsp;&nbsp;&nbsp;layer_2</tt></dd></dl>
+
+<dl><dt><a name="ComputationalGraphPrimer-train_on_all_data"><strong>train_on_all_data</strong></a>(self)</dt><dd><tt>The&nbsp;purpose&nbsp;of&nbsp;this&nbsp;method&nbsp;is&nbsp;to&nbsp;call&nbsp;<a href="#ComputationalGraphPrimer-forward_propagate_one_input_sample_with_partial_deriv_calc">forward_propagate_one_input_sample_with_partial_deriv_calc</a>()<br>
+repeatedly&nbsp;on&nbsp;all&nbsp;input/output&nbsp;ground-truth&nbsp;training&nbsp;data&nbsp;pairs&nbsp;generated&nbsp;by&nbsp;the&nbsp;method&nbsp;<br>
+<a href="#ComputationalGraphPrimer-gen_gt_dataset">gen_gt_dataset</a>().&nbsp;&nbsp;The&nbsp;call&nbsp;to&nbsp;the&nbsp;forward_propagate...()&nbsp;method&nbsp;returns&nbsp;the&nbsp;predicted&nbsp;value<br>
+at&nbsp;the&nbsp;output&nbsp;nodes&nbsp;from&nbsp;the&nbsp;supplied&nbsp;values&nbsp;at&nbsp;the&nbsp;input&nbsp;nodes.&nbsp;&nbsp;The&nbsp;"<a href="#ComputationalGraphPrimer-train_on_all_data">train_on_all_data</a>()"<br>
+method&nbsp;calculates&nbsp;the&nbsp;error&nbsp;associated&nbsp;with&nbsp;the&nbsp;predicted&nbsp;value.&nbsp;&nbsp;The&nbsp;call&nbsp;to<br>
+forward_propagate...()&nbsp;also&nbsp;returns&nbsp;the&nbsp;partial&nbsp;derivatives&nbsp;estimated&nbsp;by&nbsp;using&nbsp;the&nbsp;finite<br>
+difference&nbsp;method&nbsp;in&nbsp;the&nbsp;computational&nbsp;graph.&nbsp;&nbsp;Using&nbsp;the&nbsp;partial&nbsp;derivatives,&nbsp;the&nbsp;<br>
+"<a href="#ComputationalGraphPrimer-train_on_all_data">train_on_all_data</a>()"&nbsp;backpropagates&nbsp;the&nbsp;loss&nbsp;to&nbsp;the&nbsp;interior&nbsp;nodes&nbsp;in&nbsp;the&nbsp;computational&nbsp;graph<br>
+and&nbsp;updates&nbsp;the&nbsp;values&nbsp;for&nbsp;the&nbsp;learnable&nbsp;parameters.</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>AutogradCustomization</strong> = &lt;class 'ComputationalGraphPrimer.ComputationalGraphPrimer.AutogradCustomization'&gt;<dd><tt>This&nbsp;class&nbsp;illustrates&nbsp;how&nbsp;you&nbsp;can&nbsp;add&nbsp;additional&nbsp;functionality&nbsp;of&nbsp;Autograd&nbsp;by&nbsp;<br>
+following&nbsp;the&nbsp;instructions&nbsp;posted&nbsp;at<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;https://pytorch.org/docs/stable/notes/extending.html</tt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Exp">class <strong>Exp</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#Exp">Exp</a>(exp,&nbsp;body,&nbsp;dependent_var,&nbsp;right_vars,&nbsp;right_params)<br>
+&nbsp;<br>
+With&nbsp;CGP,&nbsp;you&nbsp;can&nbsp;handcraft&nbsp;a&nbsp;neural&nbsp;network&nbsp;(actually&nbsp;you&nbsp;can&nbsp;handcraft&nbsp;any&nbsp;DAG)&nbsp;by&nbsp;designating&nbsp;<br>
+the&nbsp;nodes&nbsp;and&nbsp;the&nbsp;links&nbsp;between&nbsp;them&nbsp;with&nbsp;expressions&nbsp;like<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;expressions&nbsp;=&nbsp;[&nbsp;'xx=xa^2',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'xy=ab*xx+ac*xa',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'xz=bc*xx+xy',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'xw=cd*xx+xz^3'&nbsp;]<br>
+&nbsp;<br>
+In&nbsp;these&nbsp;expressions,&nbsp;names&nbsp;beginning&nbsp;with&nbsp;'x'&nbsp;denote&nbsp;the&nbsp;nodes&nbsp;in&nbsp;the&nbsp;DAG,&nbsp;and&nbsp;the&nbsp;names&nbsp;beginning&nbsp;with<br>
+lowercase&nbsp;letters&nbsp;like&nbsp;'a',&nbsp;'b',&nbsp;'c',&nbsp;etc.,&nbsp;designate&nbsp;the&nbsp;learnable&nbsp;parameters.&nbsp;&nbsp;The&nbsp;variable&nbsp;on&nbsp;the<br>
+left&nbsp;of&nbsp;the&nbsp;'='&nbsp;symbol&nbsp;is&nbsp;considered&nbsp;to&nbsp;be&nbsp;the&nbsp;dependent_var&nbsp;and&nbsp;those&nbsp;on&nbsp;the&nbsp;right&nbsp;are,&nbsp;as&nbsp;you&nbsp;guessed,<br>
+the&nbsp;right_vars.&nbsp;&nbsp;Since&nbsp;the&nbsp;learnable&nbsp;parameters&nbsp;are&nbsp;always&nbsp;on&nbsp;the&nbsp;right&nbsp;of&nbsp;the&nbsp;equality&nbsp;sign,&nbsp;we&nbsp;refer<br>
+to&nbsp;them&nbsp;as&nbsp;right_params&nbsp;in&nbsp;what&nbsp;is&nbsp;shown&nbsp;below.&nbsp;&nbsp;The&nbsp;expressions&nbsp;shown&nbsp;above&nbsp;are&nbsp;parsed&nbsp;by&nbsp;the&nbsp;<br>
+parser&nbsp;function&nbsp;in&nbsp;CGP.&nbsp;&nbsp;The&nbsp;parser&nbsp;outputs&nbsp;an&nbsp;instance&nbsp;of&nbsp;the&nbsp;<a href="#Exp">Exp</a>&nbsp;class&nbsp;for&nbsp;each&nbsp;expression&nbsp;of&nbsp;the<br>
+sort&nbsp;shown&nbsp;above.&nbsp;&nbsp;What&nbsp;is&nbsp;shown&nbsp;above&nbsp;has&nbsp;4&nbsp;expressions&nbsp;for&nbsp;creating&nbsp;a&nbsp;DAG.&nbsp;Of&nbsp;course,&nbsp;you&nbsp;can&nbsp;have<br>
+any&nbsp;number&nbsp;of&nbsp;them.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Exp-__init__"><strong>__init__</strong></a>(self, exp, body, dependent_var, right_vars, right_params)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>__author__</strong> = 'Avinash Kak (kak@purdue.edu)'<br>
+<strong>__copyright__</strong> = '(C) 2023 Avinash Kak. Python Software Foundation.'<br>
+<strong>__date__</strong> = '2023-February-2'<br>
+<strong>__url__</strong> = 'https://engineering.purdue.edu/kak/distCGP/ComputationalGraphPrimer-1.1.2.html'<br>
+<strong>__version__</strong> = '1.1.2'</td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#7799ee">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Author</strong></big></font></td></tr>
+<tr><td bgcolor="#7799ee"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%">Avinash&nbsp;Kak&nbsp;(kak@purdue.edu)</td></tr></table>
+</body></html>
+
