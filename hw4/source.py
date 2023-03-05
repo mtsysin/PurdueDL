@@ -55,7 +55,7 @@ class COCODataset(torch.utils.data.Dataset):
             if os.path.exists(annFile):
                 coco=COCO(annFile)
             else:
-                raise ValueError(f"Please download the required files into {annFile}")
+                raise ValueError(f"Please download the annotation files into {annFile}")
             self.catIds = coco.getCatIds(catNms=categories_list)
 
             # If clear, clear the dataset
