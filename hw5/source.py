@@ -307,17 +307,18 @@ class HW5Net(nn.Module):
         return cls, bbox
     
 
-
 class LocLoss(nn.Module):
-    def __init__(self, reduction = 'sum') -> None:
+    def __init__(self, reduction = 'mean') -> None:
         super().__init__()
         self.reduction = reduction
 
     def forward(self, true_box, pred_box):
-        true = torch.cat((true_box[..., :2] - true_box[..., 2:4], true_box[..., :2] + true_box[..., 2:4]), -1)
-        pred = torch.cat((pred_box[..., :2] - pred_box[..., 2:4], pred_box[..., :2] + pred_box[..., 2:4]), -1)
-        return torchvision.ops.complete_box_iou_loss(true, pred, self.reduction)
-        
+        true = torch.cat((true_box[..., :2], true_box[..., :2] + true_box[..., 2:4]), -1)
+        pred = torch.cat((pred_box[..., :2], pred_box[..., :2] + pred_box[..., 2:4]), -1)
+        loss = torchvision.ops.complete_box_iou_loss(true, pred, self.reduction)
+
+        # print(loss)
+        return loss
     
 
 def train(net, save = False):
@@ -356,6 +357,7 @@ def train(net, save = False):
 
     criterion_class = torch.nn.CrossEntropyLoss()
     criterion_localization = LocLoss()
+    # criterion_localization = torch.nn.MSELoss(reduction="sum")
 
     optimizer = torch.optim.Adam(
         net.parameters(), 
@@ -367,7 +369,7 @@ def train(net, save = False):
     losses_class = []
     losses_loc = []
 
-    epochs = 10
+    epochs = 5
 
     file_log = tqdm.tqdm(total=0, position=1, bar_format='{desc}')
     outer = tqdm.tqdm(total=epochs, desc='Epochs', position=0)
@@ -382,16 +384,9 @@ def train(net, save = False):
             labels_classes = labels_classes.to(device) 
             labels_bboxes = labels_bboxes.to(device) 
 
-            # print("Labels bboxes", labels_bboxes)
-            # print("Labels classes", labels_classes)
-
-            # raise ValueError("123")
-
             optimizer.zero_grad()
 
             output_classes, output_bboxes = net(inputs)
-
-
 
             loss_class = criterion_class(output_classes, labels_classes) 
             loss_loc = criterion_localization(output_bboxes, labels_bboxes)
@@ -413,6 +408,12 @@ def train(net, save = False):
                 running_loss_class = 0.0
                 running_loss_loc = 0.0
 
+
+                # print("Labels bboxes", labels_bboxes)
+                # print("Labels classes", labels_classes)
+                # print("OUT bboxes", output_bboxes)
+                # print("OUT classes", output_classes)
+
             inner.update(1)
         outer.update(1)
 
@@ -422,13 +423,13 @@ def train(net, save = False):
     return losses, losses_class, losses_loc
 
 def iou(true_box, pred_box):
-    true = torch.cat((true_box[..., :2] - true_box[..., 2:4], true_box[..., :2] + true_box[..., 2:4]), -1)
-    pred = torch.cat((pred_box[..., :2] - pred_box[..., 2:4], pred_box[..., :2] + pred_box[..., 2:4]), -1)
-    return torchvision.ops.box_iou(true, pred, self.reduction)
+    true = torch.cat((true_box[..., :2], true_box[..., :2] + true_box[..., 2:4]), -1).unsqueeze(0)
+    pred = torch.cat((pred_box[..., :2], pred_box[..., :2] + pred_box[..., 2:4]), -1).unsqueeze(0)
+    return torchvision.ops.box_iou(true, pred)[0, 0]
 
 def val(net, load_path=None):
     # Choose device
-    if torch.cuda.is_available()== True: 
+    if torch.cuda.is_available() == True: 
         device = torch.device("cuda:0")
     else: 
         device = torch.device("cpu")
@@ -486,6 +487,8 @@ def val(net, load_path=None):
 
             output_classes, output_bboxes = net(inputs)
 
+            for i in range(output_bboxes.size()[0]):
+                test_iou += iou(output_bboxes[i, ...], labels_bboxes[i, ...])
 
             test_loss += criterion_class(output_classes, labels_classes).item() + \
                 criterion_localization(output_bboxes, labels_bboxes).item()
@@ -494,11 +497,12 @@ def val(net, load_path=None):
             pred_labels.extend(output_classes.argmax(1).view(-1).numpy())
             true_labels.extend(labels_classes.view(-1).numpy())
 
+    test_iou /= size
     test_loss /= size #batch
     correct /= size
     print(f"Test Error: \n Accuracy: {(100*correct):>0.1f}%, Avg loss: {test_loss:>8f} \n")
+    print(f"Test IOU Error: {test_iou}\n")
 
-    labels = ['bus', 'cat', 'pizza']
 
     return confusion_matrix(true_labels, pred_labels)
     
@@ -512,6 +516,13 @@ if __name__=="__main__":
     torch.cuda.manual_seed(seed)
     np.random.seed(seed)
     os.environ['PYTHONHASHSEED'] =  str(seed)
+
+    # test IOU:
+    # print(iou(
+    #     torch.tensor([2.5, 2.5, 1, 1]),
+    #     torch.tensor([2, 2, 3, 3]),
+    # ))
+    # raise ValueError()
 
     # Verify NN structure 
     # model = HW5Net(3, 1)
@@ -627,9 +638,11 @@ if __name__=="__main__":
         print(val_image.size())
         val_image = val_image.unsqueeze(0)
         print(val_image.size())
+        print(val_image)
 
  
         output_classes, output_bboxes = net(val_image)
+        print(output_bboxes)
 
         print(output_classes.size())
         print(output_bboxes.size())
@@ -642,12 +655,15 @@ if __name__=="__main__":
         print(x_p, y_p, w_p, h_p)
         print(x, y, w, h)
 
+        out_class = output_classes[0].argmax(0)
+        print("out", out_class)
+
         image = np.uint8(image)
         fig, ax = plt.subplots(1, 1)
-        # image = cv2.rectangle(image, (int(x), int(y)), (int(x + w), int(y + h)), (36, 255, 12), 2) 
+        image = cv2.rectangle(image, (int(x), int(y)), (int(x + w), int(y + h)), (36, 255, 12), 2) 
         image = cv2.rectangle(image, (int(x_p), int(y_p)), (int(x_p + w_p), int(y_p + h_p)), (36, 255, 12), 2) 
 
-        image = cv2.putText(image, class_list[label] + " -> " + class_list[label], (int(x), int(y - 10)), cv2.FONT_HERSHEY_SIMPLEX , 0.8, (36, 255, 12), 2)
+        image = cv2.putText(image, class_list[label] + " -> " + class_list[out_class], (int(x), int(y - 10)), cv2.FONT_HERSHEY_SIMPLEX , 0.8, (36, 255, 12), 2)
 
         ax.imshow(image) 
         ax.set_axis_off() 
