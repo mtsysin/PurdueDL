@@ -177,7 +177,7 @@ class COCODataset(torch.utils.data.Dataset):
         # Get category:
         img_index = self.img_list[index]
         category, bbox = self.annotation[img_index]
-        bbox = torch.tensor(bbox)
+        bbox = torch.tensor(bbox).float()
         im = Image.open(os.path.join(self.path, img_index + '.jpg'))
         if self.transform:
             im = self.transform(im)
@@ -344,7 +344,7 @@ def train(net, save = False):
         verify = True,
         train = True,
         transform=transform,
-        scale_bbox = False,
+        scale_bbox = True,
     )
 
     train_data_loader = torch.utils.data.DataLoader(dataset = train_dataset, 
@@ -364,6 +364,8 @@ def train(net, save = False):
     )
     
     losses = []
+    losses_class = []
+    losses_loc = []
 
     epochs = 10
 
@@ -371,6 +373,8 @@ def train(net, save = False):
     outer = tqdm.tqdm(total=epochs, desc='Epochs', position=0)
     for epoch in range(epochs):
         running_loss = 0.0
+        running_loss_class = 0.0
+        running_loss_loc = 0.0
         inner = tqdm.tqdm(total=len(train_data_loader), desc='Batches', position=0)
         for i, data in enumerate(train_data_loader):
             inputs, labels_classes, labels_bboxes = data
@@ -378,21 +382,36 @@ def train(net, save = False):
             labels_classes = labels_classes.to(device) 
             labels_bboxes = labels_bboxes.to(device) 
 
+            # print("Labels bboxes", labels_bboxes)
+            # print("Labels classes", labels_classes)
+
+            # raise ValueError("123")
+
             optimizer.zero_grad()
 
             output_classes, output_bboxes = net(inputs)
-            loss = criterion_class(output_classes, labels_classes) 
-            loss += criterion_localization(output_bboxes, labels_bboxes)
+
+
+
+            loss_class = criterion_class(output_classes, labels_classes) 
+            loss_loc = criterion_localization(output_bboxes, labels_bboxes)
+            loss = loss_class + loss_loc
             loss.backward()
             optimizer.step()
             running_loss += loss.item()
+            running_loss_class += loss_class.item()
+            running_loss_loc += loss_loc.item()
 
             if (i+1) % 100 == 0:
                 file_log.set_description_str(
                     "[epoch: %d, batch: %5d] loss: %.3f" % (epoch + 1, i + 1, running_loss / 100)
                 )
                 losses.append(running_loss / 100)
+                losses_class.append(running_loss_class/100)
+                losses_loc.append(running_loss_loc/100)
                 running_loss = 0.0
+                running_loss_class = 0.0
+                running_loss_loc = 0.0
 
             inner.update(1)
         outer.update(1)
@@ -400,7 +419,12 @@ def train(net, save = False):
     if save:
         torch.save(net.state_dict(), ROOT+'/model')
 
-    return losses
+    return losses, losses_class, losses_loc
+
+def iou(true_box, pred_box):
+    true = torch.cat((true_box[..., :2] - true_box[..., 2:4], true_box[..., :2] + true_box[..., 2:4]), -1)
+    pred = torch.cat((pred_box[..., :2] - pred_box[..., 2:4], pred_box[..., :2] + pred_box[..., 2:4]), -1)
+    return torchvision.ops.box_iou(true, pred, self.reduction)
 
 def val(net, load_path=None):
     # Choose device
@@ -444,6 +468,8 @@ def val(net, load_path=None):
     true_labels = []
     pred_labels = []
 
+    test_iou = 0
+
     with torch.no_grad():
         for i, data in tqdm.tqdm(enumerate(val_data_loader)):
 
@@ -459,6 +485,7 @@ def val(net, load_path=None):
             # outputs = net(inputs)
 
             output_classes, output_bboxes = net(inputs)
+
 
             test_loss += criterion_class(output_classes, labels_classes).item() + \
                 criterion_localization(output_bboxes, labels_bboxes).item()
@@ -531,13 +558,16 @@ if __name__=="__main__":
     net = HW5Net(3, 1)
     summary(net, input_size=(16, 3, 256, 256))
     net = net.to(torch.float64)
-    net.load_state_dict(torch.load(ROOT+'/model'))
+    # net.load_state_dict(torch.load(ROOT+'/model'))
 
-    # loss_trace = train(net, save=True)
-    # plt.plot(loss_trace)
-    # plt.ylabel('Loss')
-    # plt.xlabel('Processed batches * 100')
-    # plt.savefig("./out/loss_trace1.png")
+    loss_trace, loss_trace_class, loss_trace_loc = train(net, save=True)
+    plt.plot(loss_trace)
+    plt.plot(loss_trace_class)
+    plt.plot(loss_trace_loc)
+
+    plt.ylabel('Loss')
+    plt.xlabel('Processed batches * 100')
+    plt.savefig("./out/loss_trace1.png")
 
 
     # cm1 = val(net, load_path=ROOT+'/model')
@@ -590,21 +620,34 @@ if __name__=="__main__":
 
         print(c, bbox)
         print(image.size)
+
         [x, y, w, h] = bbox
         label = c
 
+        print(val_image.size())
+        val_image = val_image.unsqueeze(0)
+        print(val_image.size())
+
+ 
         output_classes, output_bboxes = net(val_image)
 
-        [x_p, y_p, w_p, h_p] = (output_bboxes*256).to(dtype=torch.int).tolist()
+        print(output_classes.size())
+        print(output_bboxes.size())
+
+        print(output_classes[0, ...].size())
+        print(output_bboxes[0, ...].size())
+
+
+        [x_p, y_p, w_p, h_p] = (output_bboxes[0, ...]*256).to(dtype=torch.int).tolist()
         print(x_p, y_p, w_p, h_p)
         print(x, y, w, h)
 
         image = np.uint8(image)
         fig, ax = plt.subplots(1, 1)
-        image = cv2.rectangle(image, (int(x), int(y)), (int(x + w), int(y + h)), (36, 255, 12), 2) 
+        # image = cv2.rectangle(image, (int(x), int(y)), (int(x + w), int(y + h)), (36, 255, 12), 2) 
         image = cv2.rectangle(image, (int(x_p), int(y_p)), (int(x_p + w_p), int(y_p + h_p)), (36, 255, 12), 2) 
 
-        image = cv2.putText(image, class_list[label], (int(x), int(y - 10)), cv2.FONT_HERSHEY_SIMPLEX , 0.8, (36, 255, 12), 2)
+        image = cv2.putText(image, class_list[label] + " -> " + class_list[label], (int(x), int(y - 10)), cv2.FONT_HERSHEY_SIMPLEX , 0.8, (36, 255, 12), 2)
 
         ax.imshow(image) 
         ax.set_axis_off() 
