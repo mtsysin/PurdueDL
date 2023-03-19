@@ -177,7 +177,7 @@ class COCODataset(torch.utils.data.Dataset):
         # Get category:
         img_index = self.img_list[index]
         category, bbox = self.annotation[img_index]
-        bbox = torch.tensor(bbox).float()
+        bbox = torch.tensor(bbox).double()
         im = Image.open(os.path.join(self.path, img_index + '.jpg'))
         if self.transform:
             im = self.transform(im)
@@ -435,7 +435,7 @@ def val(net, load_path=None):
         device = torch.device("cpu")
 
     if load_path:
-        net.load_state_dict(torch.load(load_path))
+        net.load_state_dict(torch.load(load_path, map_location=torch.device('cpu')))
 
     net.eval()
 
@@ -489,6 +489,7 @@ def val(net, load_path=None):
 
             for i in range(output_bboxes.size()[0]):
                 test_iou += iou(output_bboxes[i, ...], labels_bboxes[i, ...])
+                print(iou(output_bboxes[i, ...], labels_bboxes[i, ...]))
 
             test_loss += criterion_class(output_classes, labels_classes).item() + \
                 criterion_localization(output_bboxes, labels_bboxes).item()
@@ -543,14 +544,14 @@ if __name__=="__main__":
 
         download = False,
         verify = True,
-        train = False,
+        train = True,
         # clear=True
     )
 
     for _ in range(0):
         idx = np.random.randint(0, len(dataset))
 
-        image, c, bbox = dataset[234]
+        image, c, bbox = dataset[idx]
         print(c, bbox)
         print(image.size)
         [x, y, w, h] = bbox
@@ -567,31 +568,31 @@ if __name__=="__main__":
         plt.show()
 
     net = HW5Net(3, 1)
-    summary(net, input_size=(16, 3, 256, 256))
+    # summary(net, input_size=(16, 3, 256, 256))
     net = net.to(torch.float64)
-    # net.load_state_dict(torch.load(ROOT+'/model'))
+    net.load_state_dict(torch.load(ROOT+'/model', map_location=torch.device('cpu')))
 
-    loss_trace, loss_trace_class, loss_trace_loc = train(net, save=True)
-    plt.plot(loss_trace)
-    plt.plot(loss_trace_class)
-    plt.plot(loss_trace_loc)
+    # loss_trace, loss_trace_class, loss_trace_loc = train(net, save=True)
+    # plt.plot(loss_trace)
+    # plt.plot(loss_trace_class)
+    # plt.plot(loss_trace_loc)
 
-    plt.ylabel('Loss')
-    plt.xlabel('Processed batches * 100')
-    plt.savefig("./out/loss_trace1.png")
+    # plt.ylabel('Loss')
+    # plt.xlabel('Processed batches * 100')
+    # plt.savefig("./out/loss_trace1.png")
 
 
-    # cm1 = val(net, load_path=ROOT+'/model')
-    # plt.figure(figsize = (12,7))
-    # hm = sn.heatmap(data=cm1,
-    #     annot=True,
-    #     xticklabels=class_list, 
-    #     yticklabels=class_list,
-    #     square=1, 
-    #     linewidth=1.,
-    #     fmt = '.0f'
-    # )
-    # plt.savefig("./out/hm.png")
+    cm1 = val(net, load_path=ROOT+'/model')
+    plt.figure(figsize = (12,7))
+    hm = sn.heatmap(data=cm1,
+        annot=True,
+        xticklabels=class_list, 
+        yticklabels=class_list,
+        square=1, 
+        linewidth=1.,
+        fmt = '.0f'
+    )
+    plt.savefig("./out/hm.png")
 
 
 
@@ -626,8 +627,8 @@ if __name__=="__main__":
     for _ in range(1):
 
         idx = np.random.randint(0, len(dataset))
-        image, c, bbox = dataset[idx]
-        val_image, _, _ = val_dataset[idx]
+        image, c, bbox = dataset[idx-103]
+        val_image, _, _ = val_dataset[idx-103]
 
         print(c, bbox)
         print(image.size)
@@ -638,7 +639,7 @@ if __name__=="__main__":
         print(val_image.size())
         val_image = val_image.unsqueeze(0)
         print(val_image.size())
-        print(val_image)
+        # print(val_image)
 
  
         output_classes, output_bboxes = net(val_image)
@@ -661,7 +662,7 @@ if __name__=="__main__":
         image = np.uint8(image)
         fig, ax = plt.subplots(1, 1)
         image = cv2.rectangle(image, (int(x), int(y)), (int(x + w), int(y + h)), (36, 255, 12), 2) 
-        image = cv2.rectangle(image, (int(x_p), int(y_p)), (int(x_p + w_p), int(y_p + h_p)), (36, 255, 12), 2) 
+        image = cv2.rectangle(image, (int(x_p), int(y_p)), (int(x_p + w_p), int(y_p + h_p)), (233, 9, 12), 2) 
 
         image = cv2.putText(image, class_list[label] + " -> " + class_list[out_class], (int(x), int(y - 10)), cv2.FONT_HERSHEY_SIMPLEX , 0.8, (36, 255, 12), 2)
 
