@@ -57,7 +57,8 @@ class YOLOLoss(nn.Module):
         # print("pred BCEEEEE", torch.max(pred_bce), torch.min(pred_bce))
         # print("pred BCEEEEE", torch.max(target[..., 0].unsqueeze(-1)), torch.min(target[..., 0].unsqueeze(-1)))
 
-        loss1 = self.criterion1(pred_bce, target[..., 0].unsqueeze(-1))
+        loss1 = self.criterion1(pred_bce, target[..., 0].unsqueeze(-1)) \
+            + 10 * self.criterion1(nn.Sigmoid()(object_present_pred[..., 0].unsqueeze(-1)), object_present_target[..., 0].unsqueeze(-1))# Separately for objects
         loss2 = self.criterion2(object_present_pred[..., 1:5], object_present_target[..., 1:5])
         loss3 = self.criterion3(object_present_pred[..., 5:], object_present_target[..., 5:])
         # print(loss1, loss2, loss3)

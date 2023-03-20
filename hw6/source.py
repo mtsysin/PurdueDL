@@ -8,11 +8,13 @@ import torchvision.transforms as tvt
 import tqdm
 from sklearn.metrics import confusion_matrix
 import cv2
+import math
 from dataset import COCODataset
 from loss import YOLOLoss
 from typing import Any, Callable, List, Optional, Type, Union
 from model import ResnetBlock, HW5Net
 from operator import add
+import torch.nn as nn
 
 MIN_W = 200
 MIN_H = 200
@@ -204,114 +206,121 @@ def val(net, load_path=None):
     
 if __name__=="__main__":
     # Initialization
-    seed = 0
-    random.seed(seed)
-    torch.manual_seed(seed)
-    torch.cuda.manual_seed(seed)
-    np.random.seed(seed)
-    os.environ['PYTHONHASHSEED'] =  str(seed)
+    # seed = 0
+    # random.seed(seed)
+    # torch.manual_seed(seed)
+    # torch.cuda.manual_seed(seed)
+    # np.random.seed(seed)
+    # os.environ['PYTHONHASHSEED'] =  str(seed)
 
     class_list = ['bus', 'cat', 'pizza']
 
     net = HW5Net(3)
     net = net.to(torch.float32)
-    # net.load_state_dict(torch.load(ROOT+'/model', map_location=torch.device('cpu')))
+    net.load_state_dict(torch.load(ROOT+'/models/model', map_location=torch.device('cpu')))
 
-    loss_trace, loss_traces = train(net, save=True)
-    plt.plot(loss_trace)
-    for trace in zip(*loss_traces):
-        plt.plot(trace)
+    # loss_trace, loss_traces = train(net, save=True)
+    # labels_names = ["BCE", "MSE", "Cross entropy"]
+    # plt.plot(loss_trace, label = "Combined")
+    # for i, trace in enumerate(zip(*loss_traces)):
+    #     plt.plot(trace, label = labels_names[i])
 
-    plt.ylabel('Loss')
-    plt.xlabel('Processed batches * 100')
-    plt.savefig("./out/loss_trace1.png")
+    # plt.ylabel('Loss')
+    # plt.xlabel('Processed batches * 100')
+    # plt.legend()
+    # plt.savefig("./out/loss_trace1.png")
 
+    transform = tvt.Compose([tvt.ToTensor(), tvt.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
-    # cm1 = val(net, load_path=ROOT+'/model')
-    # plt.figure(figsize = (12,7))
-    # hm = sn.heatmap(data=cm1,
-    #     annot=True,
-    #     xticklabels=class_list, 
-    #     yticklabels=class_list,
-    #     square=1, 
-    #     linewidth=1.,
-    #     fmt = '.0f'
-    # )
-    # plt.savefig("./out/hm.png")
+    dataset = COCODataset(
+        root=ROOT,
+        categories_list=class_list,
+        train = False,
+        clear = False,
+        download = False,
+        verify = True,
+        grid_size = 32,
+        return_raw = False,
+        anchor_boxes = 5,
+        transform=transform
+    )
+    raw_dataset = COCODataset(
+        root=ROOT,
+        categories_list=class_list,
+        train = False,
+        clear = False,
+        download = False,
+        verify = True,
+        grid_size = 32,
+        return_raw = False,
+        anchor_boxes = 5,
+    )
 
+    MAX_SHOW = 3
 
+    for _ in range(1):
+        # Get index from the dataset
+        idx =  np.random.randint(0, len(dataset)) # 452, 2343
+        print(idx)
+        image, _ = raw_dataset[idx]
+        image_input , label = dataset[idx]
 
-    # dataset = COCODataset(
-    #     root=ROOT,
-    #     categories_list=class_list,
-    #     num_train_min=100,
-    #     num_train_max=4200,
-    #     num_val_min=1000,
-    #     num_val_max=3000,
-    #     download = False,
-    #     verify = True,
-    #     train = False,
-    #     # clear=True
-    # )
+        label = net(image_input.unsqueeze(0)).squeeze(0)
 
-    # transform = tvt.Compose([tvt.ToTensor(), tvt.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+        print("Image size: ", image.size)
+        print("Label size: ", label.size())
+        # print(label[..., 0])
 
-    # val_dataset = COCODataset(
-    #     root=ROOT,
-    #     categories_list=class_list,
-    #     num_train_min=2000,
-    #     num_train_max=4000,
-    #     num_val_min=1000,
-    #     num_val_max=3000,
-    #     download = False,
-    #     verify = True,
-    #     train = False,
-    #     transform=transform
-    # )
+        # Find indices and bboxes where there is an image:
+        pred_bce = nn.Sigmoid()(label[..., 0])
+        # top = torch.topk(pred_bce, 3, dim=-1)
+        # print("TOP: ", top)
+        Iobj_i = (nn.Sigmoid()(label[..., 0])>0.01).bool()
 
-    for _ in range(0):
+        selected_igms = label[Iobj_i]
+        _, select_ind = torch.topk(selected_igms[..., 0], 2)
+        print(select_ind)
+        selected_igms = selected_igms[select_ind]
+        selected_igms_positions = Iobj_i.nonzero(as_tuple=False)
+        selected_igms_positions =selected_igms_positions[select_ind]
+        print("Selected yolo vectors: ", selected_igms)
+        print("Selected yolo vectors positions: ", selected_igms_positions)
 
-        idx = np.random.randint(0, len(dataset))
-        image, c, bbox = dataset[idx-103]
-        val_image, _, _ = val_dataset[idx-103]
-
-        print(c, bbox)
-        print(image.size)
-
-        [x, y, w, h] = bbox
-        label = c
-
-        print(val_image.size())
-        val_image = val_image.unsqueeze(0)
-        print(val_image.size())
-        # print(val_image)
-
- 
-        output_classes, output_bboxes = net(val_image)
-        print(output_bboxes)
-
-        print(output_classes.size())
-        print(output_bboxes.size())
-
-        print(output_classes[0, ...].size())
-        print(output_bboxes[0, ...].size())
-
-
-        [x_p, y_p, w_p, h_p] = (output_bboxes[0, ...]*256).to(dtype=torch.int).tolist()
-        print(x_p, y_p, w_p, h_p)
-        print(x, y, w, h)
-
-        out_class = output_classes[0].argmax(0)
-        print("out", out_class)
-
+        # Show image and corresponding bounding boxes:
         image = np.uint8(image)
         fig, ax = plt.subplots(1, 1)
-        image = cv2.rectangle(image, (int(x), int(y)), (int(x + w), int(y + h)), (36, 255, 12), 2) 
-        image = cv2.rectangle(image, (int(x_p), int(y_p)), (int(x_p + w_p), int(y_p + h_p)), (233, 9, 12), 2) 
+        for yolo_vector, position in zip(selected_igms, selected_igms_positions):
+            # get bbox values and convert them to scalars
+            x, y, w, h = yolo_vector[1:5].tolist()
+            class_vector = yolo_vector[5:].tolist()
+            class_index = class_vector.index(max(class_vector))
+            anchor_idx, x_idx, y_idx = position.tolist()
 
-        image = cv2.putText(image, class_list[label] + " -> " + class_list[out_class], (int(x), int(y - 10)), cv2.FONT_HERSHEY_SIMPLEX , 0.8, (36, 255, 12), 2)
+            if anchor_idx == 0: 
+                w_scale, h_scale = 3, 1
+            if anchor_idx == 1: 
+                w_scale, h_scale = 2, 1
+            if anchor_idx == 2: 
+                w_scale, h_scale = 1, 1
+            if anchor_idx == 3: 
+                w_scale, h_scale = 1, 2
+            if anchor_idx == 4: 
+                w_scale, h_scale = 1, 3
+
+            # Select correct dimenstions
+            x = int((x + (x_idx + 0.5)) * dataset.grid_size)
+            y = int((y + (y_idx + 0.5)) * dataset.grid_size)
+            w = int(math.exp(w) * dataset.grid_size * w_scale)
+            h = int(math.exp(h) * dataset.grid_size * h_scale)
+
+            print(x, y, w, h)
+
+            image = cv2.rectangle(image, (int(x - w/2), int(y - h/2)), (int(x + w/2), int(y + h/2)), (36, 255, 12), 2) 
+            image = cv2.putText(image, class_list[class_index], (int(x), int(y - 10)), cv2.FONT_HERSHEY_SIMPLEX , 0.8, (36, 255, 12), 2)
+
 
         ax.imshow(image) 
         ax.set_axis_off() 
         plt.axis('tight') 
         plt.show()
+
