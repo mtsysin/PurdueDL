@@ -94,7 +94,7 @@ class HW5Net(nn.Module):
             model += [ResnetBlock(ngf * mult, ngf * mult)] 
 
         # Add downsampling layers with ResNet
-        n_downsampling_2 = 2
+        n_downsampling_2 = 3
         for _ in range(n_downsampling_2):
             model += [
                 # nn.Conv2d(ngf * mult, ngf * mult * 2, kernel_size=3, stride=2, padding=1),
@@ -115,7 +115,7 @@ class HW5Net(nn.Module):
     def forward(self, input):
         ft = self.model(input) 
         # print("pre ", ft[0, 0, 0,...])
-        out = self.head(ft).view(-1, self.anchors, 8, 8, 5 + self.classes)
+        out = self.head(ft).view(-1, self.anchors, 4, 4, 5 + self.classes)
         return out
     
 

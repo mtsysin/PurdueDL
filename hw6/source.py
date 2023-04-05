@@ -58,6 +58,8 @@ def train(net, save = False):
         lr=1e-3, 
         betas=(0.9, 0.99)
     )
+
+    scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[30,80], gamma=0.1)
     
     losses = []
     losses_separate = []
@@ -115,6 +117,7 @@ def train(net, save = False):
                 # print("OUT classes", output_classes)
 
             inner.update(1)
+        scheduler.step()
         outer.update(1)
 
     if save:
@@ -122,87 +125,7 @@ def train(net, save = False):
 
     return losses, losses_separate
 
-def val(net, load_path=None):
-    # Choose device
-    if torch.cuda.is_available() == True: 
-        device = torch.device("cuda:0")
-    else: 
-        device = torch.device("cpu")
 
-    if load_path:
-        net.load_state_dict(torch.load(load_path, map_location=torch.device('cpu')))
-
-    net.eval()
-
-    # Create transform
-    transform = tvt.Compose([tvt.ToTensor(), tvt.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
-    batch = 10
-
-    val_dataset = COCODataset(
-        root=ROOT,
-        categories_list=['bus', 'cat', 'pizza'],
-        num_train_min=2000,
-        num_train_max=4000,
-        num_val_min=1000,
-        num_val_max=3000,
-        download = False,
-        verify = True,
-        train = False,
-        transform=transform
-    )
-
-    val_data_loader = torch.utils.data.DataLoader(dataset = val_dataset, 
-                                                batch_size = batch, 
-                                                shuffle = True, 
-                                                num_workers = 0)
-
-    test_loss, correct = 0, 0
-    criterion_class = torch.nn.CrossEntropyLoss()
-    criterion_localization = LocLoss()
-    size = len(val_data_loader.dataset)
-
-    true_labels = []
-    pred_labels = []
-
-    test_iou = 0
-
-    with torch.no_grad():
-        for i, data in tqdm.tqdm(enumerate(val_data_loader)):
-
-            inputs, labels_classes, labels_bboxes = data
-            inputs = inputs.to(device)
-            labels_classes = labels_classes.to(device) 
-            labels_bboxes = labels_bboxes.to(device) 
-
-            # inputs, labels = data
-            # inputs = inputs.to(device)
-            # labels = labels.to(device) 
-
-            # outputs = net(inputs)
-
-            output_classes, output_bboxes = net(inputs)
-
-            for i in range(output_bboxes.size()[0]):
-                test_iou += iou(output_bboxes[i, ...], labels_bboxes[i, ...])
-                print(iou(output_bboxes[i, ...], labels_bboxes[i, ...]))
-
-            test_loss += criterion_class(output_classes, labels_classes).item() + \
-                criterion_localization(output_bboxes, labels_bboxes).item()
-
-            correct += (output_classes.argmax(1) == labels_classes).type(torch.float).sum().item()
-            pred_labels.extend(output_classes.argmax(1).view(-1).numpy())
-            true_labels.extend(labels_classes.view(-1).numpy())
-
-    test_iou /= size
-    test_loss /= size #batch
-    correct /= size
-    print(f"Test Error: \n Accuracy: {(100*correct):>0.1f}%, Avg loss: {test_loss:>8f} \n")
-    print(f"Test IOU Error: {test_iou}\n")
-
-
-    return confusion_matrix(true_labels, pred_labels)
-    
-    
     
 if __name__=="__main__":
     # Initialization
@@ -217,7 +140,7 @@ if __name__=="__main__":
 
     net = HW5Net(3)
     net = net.to(torch.float32)
-    net.load_state_dict(torch.load(ROOT+'/models/model', map_location=torch.device('cpu')))
+    net.load_state_dict(torch.load(ROOT+'/models/model5', map_location=torch.device('cpu')))
 
     # loss_trace, loss_traces = train(net, save=True)
     # labels_names = ["BCE", "MSE", "Cross entropy"]
@@ -239,7 +162,7 @@ if __name__=="__main__":
         clear = False,
         download = False,
         verify = True,
-        grid_size = 32,
+        grid_size = 64,
         return_raw = False,
         anchor_boxes = 5,
         transform=transform
@@ -251,16 +174,17 @@ if __name__=="__main__":
         clear = False,
         download = False,
         verify = True,
-        grid_size = 32,
+        grid_size = 64,
         return_raw = False,
         anchor_boxes = 5,
     )
 
     MAX_SHOW = 3
 
-    for _ in range(1):
+    for _ in range(100):
         # Get index from the dataset
-        idx =  np.random.randint(0, len(dataset)) # 452, 2343
+        idx =  np.random.randint(0, len(dataset)) # 452, 2343 388 97 136 3284
+        # idx= 136
         print(idx)
         image, _ = raw_dataset[idx]
         image_input , label = dataset[idx]
@@ -275,7 +199,7 @@ if __name__=="__main__":
         pred_bce = nn.Sigmoid()(label[..., 0])
         # top = torch.topk(pred_bce, 3, dim=-1)
         # print("TOP: ", top)
-        Iobj_i = (nn.Sigmoid()(label[..., 0])>0.01).bool()
+        Iobj_i = (nn.Sigmoid()(label[..., 0])>0.1).bool()
 
         selected_igms = label[Iobj_i]
         _, select_ind = torch.topk(selected_igms[..., 0], 2)

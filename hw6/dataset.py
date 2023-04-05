@@ -263,12 +263,12 @@ if __name__ == "__main__":
     Test dataset functionality
     """
 
-    seed = 0
-    random.seed(seed)
-    torch.manual_seed(seed)
-    torch.cuda.manual_seed(seed)
-    np.random.seed(seed)
-    os.environ['PYTHONHASHSEED'] =  str(seed)
+    # seed = 0
+    # random.seed(seed)
+    # torch.manual_seed(seed)
+    # torch.cuda.manual_seed(seed)
+    # np.random.seed(seed)
+    # os.environ['PYTHONHASHSEED'] =  str(seed)
 
     class_list = ['bus', 'cat', 'pizza']
 
@@ -292,18 +292,18 @@ if __name__ == "__main__":
     dataset = COCODataset(
         root=ROOT,
         categories_list=class_list,
-        train = True,
+        train = False,
         clear = False,
         download = False,
         verify = True,
-        grid_size = 32,
+        grid_size = 64,
         return_raw = False,
         anchor_boxes = 5
     )
 
-    for _ in range(1):
+    for _ in range(10):
         # Get index from the dataset
-        idx = 25 #np.random.randint(0, len(dataset))
+        idx = np.random.randint(0, len(dataset))
         image, label = dataset[idx]
 
         print("Image size: ", image.size)
@@ -356,29 +356,29 @@ if __name__ == "__main__":
         plt.show()
 
     
-    # Raw
-    dataset = COCODataset(
-        root=ROOT,
-        categories_list=class_list,
-        train = True,
-        clear = False,
-        download = False,
-        verify = True,
-        grid_size = 32,
-        return_raw = True,
-        anchor_boxes = 5,
-    )
+    # # Raw
+    # dataset = COCODataset(
+    #     root=ROOT,
+    #     categories_list=class_list,
+    #     train = True,
+    #     clear = False,
+    #     download = False,
+    #     verify = True,
+    #     grid_size = 32,
+    #     return_raw = True,
+    #     anchor_boxes = 5,
+    # )
 
-    image, label = dataset[25]
-    image = np.uint8(image)
-    fig, ax = plt.subplots(1, 1)
+    # image, label = dataset[25]
+    # image = np.uint8(image)
+    # fig, ax = plt.subplots(1, 1)
 
-    print(label)
+    # print(label)
 
-    ax.imshow(image) 
-    ax.set_axis_off() 
-    plt.axis('tight') 
-    plt.show()
+    # ax.imshow(image) 
+    # ax.set_axis_off() 
+    # plt.axis('tight') 
+    # plt.show()
 
     
 
