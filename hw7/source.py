@@ -9,10 +9,7 @@ import tqdm
 from sklearn.metrics import confusion_matrix
 import cv2
 import math
-from dataset import COCODataset
-from loss import YOLOLoss
 from typing import Any, Callable, List, Optional, Type, Union
-from model import ResnetBlock, HW5Net
 from operator import add
 import torch.nn as nn
 import torchvision.datasets as dset
