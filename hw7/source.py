@@ -251,7 +251,7 @@ if __name__=="__main__":
     plt.xlabel("iterations")
     plt.ylabel("Loss")
     plt.legend()
-    plt.show()
+    plt.savefig("out/figure.png")
 
 # def train(net, save = False):
 #     # Choose device
