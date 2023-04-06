@@ -15,6 +15,9 @@ import torch.nn as nn
 import torchvision.datasets as dset
 import torchvision.transforms as transforms
 import torchvision
+import time
+from pytorch_fid.fid_score import calculate_activation_statistics, calculate_frechet_distance
+from pytorch_fid.inception import InceptionV3
 
 
 MIN_W = 200
@@ -32,7 +35,7 @@ lr = 0.0002
 # Beta1 hyperparam for Adam optimizers
 beta1 = 0.5
 # Number of training epochs
-num_epochs = 5
+num_epochs = 50
 # Length of noise vector
 nz = 100
 
@@ -104,24 +107,54 @@ class Discriminator(nn.Module):
         return self.main(input)
     
 
+class Critic(nn.Module):
+    def __init__(self):
+        super(Critic, self).__init__()
+        self.main = nn.Sequential(
+            # input is (nc) x 64 x 64
+            nn.Conv2d(3, 64, 4, 2, 1, bias=False),
+            nn.LeakyReLU(0.2, inplace=True),
+            # state size. (ndf) x 32 x 32
+            nn.Conv2d(64, 64 * 2, 4, 2, 1, bias=False),
+            nn.BatchNorm2d(64 * 2),
+            nn.LeakyReLU(0.2, inplace=True),
+            # state size. (ndf*2) x 16 x 16
+            nn.Conv2d(64 * 2, 64 * 4, 4, 2, 1, bias=False),
+            nn.BatchNorm2d(64 * 4),
+            nn.LeakyReLU(0.2, inplace=True),
+            # state size. (ndf*4) x 8 x 8
+            nn.Conv2d(64 * 4, 64 * 8, 4, 2, 1, bias=False),
+            nn.BatchNorm2d(64 * 8),
+            nn.LeakyReLU(0.2, inplace=True),
+            # state size. (ndf*8) x 4 x 4
+            nn.Conv2d(64 * 8, 1, 2, 0, 0, bias=False),
+        )
+        self.final = nn.Linear(batch_size * 4, 1)
+    def forward(self, x):              
+        x = self.main(x)
+        print(x.size())
+        x = x.view(-1)
+        x = self.final(x)
+        x = x.mean(0)       
+        x = x.view(1)
+        return x
+    
+ # Set up the dataset for training
+dataset = dset.ImageFolder(root=DATA_ROOT,
+                        transform=transforms.Compose([
+                            transforms.ToTensor(),
+                            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
+                        ]))
 
-if __name__=="__main__":
+# Dataloader
+dataloader = torch.utils.data.DataLoader(dataset, batch_size=batch_size,
+                                        shuffle=True, num_workers=workers)
 
-    # Set up the dataset for training
-    dataset = dset.ImageFolder(root=DATA_ROOT,
-                            transform=transforms.Compose([
-                                transforms.ToTensor(),
-                                transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
-                            ]))
-
-    # Dataloader
-    dataloader = torch.utils.data.DataLoader(dataset, batch_size=batch_size,
-                                            shuffle=True, num_workers=workers)
-
-    # Decide which device we want to run on
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    print("Device used: ", device)
-
+# Decide which device we want to run on
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+print("Device used: ", device)
+    
+def show_imgs():
     # Plot some training images
     real_batch = next(iter(dataloader))
     print(real_batch[0].size())
@@ -132,6 +165,7 @@ if __name__=="__main__":
     plt.imsave("out/train_imgs.png", imgs_save)
 
 
+def train_bce():
 
     # Create the generator
     netG = Generator().to(device)
@@ -173,9 +207,7 @@ if __name__=="__main__":
         # For each batch in the dataloader
         for i, data in enumerate(dataloader, 0):
 
-            ############################
             # (1) Update D network: maximize log(D(x)) + log(1 - D(G(z)))
-            ###########################
             ## Train with all-real batch
             netD.zero_grad()
             # Format batch
@@ -208,9 +240,7 @@ if __name__=="__main__":
             # Update D
             optimizerD.step()
 
-            ############################
             # (2) Update G network: maximize log(D(G(z)))
-            ###########################
             netG.zero_grad()
             label.fill_(real_label)  # fake labels are real for generator cost
             # Since we just updated D, perform another forward pass of all-fake batch through D
@@ -234,7 +264,7 @@ if __name__=="__main__":
             D_losses.append(errD.item())
 
             # Check how the generator is doing by saving G's output on fixed_noise
-            if (iters % 500 == 0) or ((epoch == num_epochs-1) and (i == len(dataloader)-1)):
+            if (iters % 250 == 0) or ((epoch == num_epochs-1) and (i == len(dataloader)-1)):
                 with torch.no_grad():
                     fake = netG(fixed_noise).detach().cpu()
                 img_list.append(torchvision.utils.make_grid(fake, padding=2, normalize=True))
@@ -263,230 +293,198 @@ if __name__=="__main__":
 
     # HTML(ani.to_jshtml())
 
-# def train(net, save = False):
-#     # Choose device
-#     if torch.cuda.is_available()== True: 
-#         device = torch.device("cuda:0")
-#     else: 
-#         device = torch.device("cpu")
 
-#     net.train()
+def wgan():
+    """
+    This function is meant for training a CG1-based Critic-Generator WGAN.   The implementation
+    shown uses several programming constructs from the WGAN implementation at GitHub by the
+    original authors of the famous WGAN paper. I have also used several programming constructs 
+    from the DCGAN code at PyTorch and GitHub.  Regarding how to set the parameters of this method, 
+    see the following script in the "ExamplesAdversarialLearning" directory of the distribution:
 
-#     # Create transform
-#     transform = tvt.Compose([tvt.ToTensor(), tvt.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
-#     batch = 10
+                    wgan_CG1.py
+    """
 
-#     train_dataset = COCODataset(
-#         root=ROOT,
-#         categories_list=['bus', 'cat', 'pizza'],
-#         download = False,
-#         verify = True,
-#         train = True,
-#         transform=transform,
-#     )
 
-#     train_data_loader = torch.utils.data.DataLoader(dataset = train_dataset, 
-#                                                   batch_size = batch, 
-#                                                   shuffle = True, 
-#                                                   num_workers = 0)
+    # Create the generator
+    netG = Generator().to(device)
+    # Create the Discriminator
+    netC = Critic().to(device)
 
-#     net = net.to(device)
+    # Apply the weights_init function to randomly initialize all weights
+    #  to mean=0, stdev=0.2.
+    netC.apply(weights_init)
+    netG.apply(weights_init)
 
-#     criterion = YOLOLoss()
-#     # criterion_localization = torch.nn.MSELoss(reduction="sum")
+    # Print the model
+    print(netG)
+    print(netC)
 
-#     optimizer = torch.optim.Adam(
-#         net.parameters(), 
-#         lr=1e-3, 
-#         betas=(0.9, 0.99)
-#     )
+    # Create batch of latent vectors that we will use to visualize
+    #  the progression of the generator
+    fixed_noise = torch.randn(64, nz, 1, 1, device=device)
 
-#     scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[30,80], gamma=0.1)
+    # Setup Adam optimizers for both G and D
+    optimizerC = torch.optim.Adam(netC.parameters(), lr=lr, betas=(beta1, 0.999))
+    optimizerG = torch.optim.Adam(netG.parameters(), lr=lr, betas=(beta1, 0.999))
     
-#     losses = []
-#     losses_separate = []
 
-#     epochs = 5
-
-#     file_log = tqdm.tqdm(total=0, position=1, bar_format='{desc}')
-#     outer = tqdm.tqdm(total=epochs, desc='Epochs', position=0)
-#     for epoch in range(epochs):
-#         running_loss = 0.0
-#         running_loss_separate = [0.0] * 3
-#         inner = tqdm.tqdm(total=len(train_data_loader), desc='Batches', position=0)
-#         for i, data in enumerate(train_data_loader):
-#             inputs, labels = data
-#             inputs = inputs.to(device)
-
-#             # print(inputs[0, 0, 0,...])
-
-#             labels = labels.to(device) 
-
-#             optimizer.zero_grad()
-
-#             outputs = net(inputs)
-
-#             # print(outputs[0, 0, 0,...])
-
-#             batch_losses = criterion(outputs, labels)
-#             # print(batch_losses)
-
-#             loss = sum(batch_losses)
-#             # print(loss)
-
-#             loss.backward()
-#             # for param in net.parameters():
-#                 # print(param.grad[0,...], param.size())
-#             #     break
-#             optimizer.step()
-
-#             running_loss += loss.item()
-#             running_loss_separate = [curr_loss + new_loss.item() for curr_loss, new_loss in zip(running_loss_separate, batch_losses)]
+    #  These are for training the Critic, 'one' is for the part of the training with actual
+    #  training images, and 'minus_one' is for the part based on the images produced by the 
+    #  Generator:
+    one = torch.FloatTensor([1]).to(device)
+    minus_one = torch.FloatTensor([-1]).to(device)
+    # one = torch.tensor(1, dtype=torch.float)
+    # minus_one = torch.tensor(-1, dtype=torch.float)
 
 
-#             if (i+1) % LOSS_COUNT == 0:
-#                 file_log.set_description_str(
-#                     "[epoch: %d, batch: %5d] loss: %.3f" % (epoch + 1, i + 1, running_loss / LOSS_COUNT)
-#                 )
-#                 losses.append(running_loss / LOSS_COUNT)
-#                 losses_separate.append([el/LOSS_COUNT for el in running_loss_separate])
-#                 running_loss = 0.0
-#                 running_loss_separate = [0.0] * 3
+    img_list = []                               
+    Gen_losses = []                               
+    Cri_losses = []                               
+    iters = 0                                   
+    gen_iterations = 0
+    print("\n\nStarting Training Loop.......[Be very patient at the beginning since the Critic must separately be taken through a few hundred iterations of training before you get to see anything displayed in your terminal window.  Depending on your hardware, it may take around 5 minutes. Subsequently, each 100 iterations will take just a few seconds. ]\n\n")      
+    start_time = time.perf_counter()            
+    clipping_thresh = 0.01
+    # For each epoch
+    for epoch in range(num_epochs):        
+        data_iter = iter(dataloader)
+        i = 0
+        ncritic = 5
+        while i < len(dataloader):
+            for p in netC.parameters():
+                p.requires_grad = True          
+            if gen_iterations < 25 or gen_iterations % 500 == 0:    # the choices 25 and 500 are from WGAN
+                ncritic = 100
+            ic = 0
+            ##  The inner 'while' loop shown below calculates the expectations in Eq. (8) in the doc section
+            ##  at the beginning of this file:
+            while ic < ncritic and i < len(dataloader):
+                ic += 1
+                for p in netC.parameters():
+                    p.data.clamp_(-clipping_thresh, clipping_thresh)
+                ## Training the Critic (Part 1):
+                #  The maximization needed for training the Critic, as shown in Eq. (8) in the doc section
+                #  at the beginning of this file, consists of two parts.  The first part involves applying the
+                #  Critic network to just the training images, with each image subject to a "gradient
+                #  target" of "-1".
+                netC.zero_grad()                                                                            
+                real_images_in_batch =  next(data_iter)
+                i += 1
+                real_images_in_batch =  real_images_in_batch[0].to(device)   
+                #  Need to know how many images we pulled in since at the tailend of the dataset, the 
+                #  number of images may not equal the user-specified batch size:
+                b_size = real_images_in_batch.size(0)   
+                #  Note that a single scalar is produced for all the data in a batch.  This is probably
+                #  the reason why what the Generator learns is somewhat fuzzy.
+                critic_for_reals_mean = netC(real_images_in_batch)
+                ## 'minus_one' is the gradient target:
+                critic_for_reals_mean.backward(minus_one)  
 
-#                 # print("Labels bboxes", labels_bboxes)
-#                 # print("Labels classes", labels_classes)
-#                 # print("OUT bboxes", output_bboxes)
-#                 # print("OUT classes", output_classes)
+                ## Training the Critic (Part 2):
+                #  The second part of Critic training requires that we apply the Critic to the images
+                #  produced by the Generator for a fresh batch of input noise vectors. The output of 
+                #  the Critic for these images must be subject to the target "-1".
+                noise = torch.randn(b_size, nz, 1, 1, device=device)    
+                fakes = netG(noise)          
+                #  Again, a single number is produced for the whole batch:
+                critic_for_fakes_mean = netC(fakes)
+                ## 'one' is the gradient target:
+                critic_for_fakes_mean.backward(one)
+                wasser_dist = critic_for_reals_mean - critic_for_fakes_mean
+                loss_critic = critic_for_fakes_mean - critic_for_reals_mean
+                #  Update the Critic
+                optimizerC.step()   
 
-#             inner.update(1)
-#         scheduler.step()
-#         outer.update(1)
+            ## Training the Generator:
+            ##   That brings us to the training of the Generator through the minimization required by the 
+            ##   minmax objective in Eq. (7) at the beginning of this file.  To that end, first we must 
+            ##   turn off the "requires_grad" of the Critic parameters since the Critic and the Generator 
+            ##   must be updated independently:
+            for p in netC.parameters():
+                p.requires_grad = False
+            netG.zero_grad()                         
+            #  This is again a single scalar based characterization of the whole batch of the Generator images:
+            noise = torch.randn(b_size, nz, 1, 1, device=device)    
+            fakes = netG(noise)          
+            critic_for_fakes_mean = netC(fakes)
+            loss_gen = critic_for_fakes_mean
+            critic_for_fakes_mean.backward(minus_one)                       
+            #  Update the Generator
+            optimizerG.step()                                                                          
+            gen_iterations += 1
 
-#     if save:
-#         torch.save(net.state_dict(), ROOT+'/model')
-
-#     return losses, losses_separate
-
-
+            if i % (ncritic * 20) == 0:   
+                current_time = time.perf_counter()                                                            
+                elapsed_time = current_time - start_time                                                      
+                print("[epoch=%d/%d   i=%4d   el_time=%5d secs]     loss_critic=%7.4f   loss_gen=%7.4f   Wasserstein_dist=%7.4f" %  (epoch, num_epochs,i,elapsed_time,loss_critic.data[0], loss_gen.data[0], wasser_dist.data[0]))
+            Gen_losses.append(loss_gen.data[0].item())      
+            Cri_losses.append(loss_critic.data[0].item())   
+            #  Get G's output on fixed_noise for the GIF animation:
+            if (iters % 500 == 0) or ((epoch == num_epochs-1) and (i == len(dataloader)-1)): 
+                with torch.no_grad():                                                                        
+                    fake = netG(fixed_noise).detach().cpu()  ## detach() removes the fake from comp. graph.
+                                                                ## for its CPU compatible version
+                img_list.append(torchvision.utils.make_grid(fake, padding=1, pad_value=1, normalize=True))   
+            iters += 1                                                                                        
     
-# if __name__=="__main__":
-#     # Initialization
-#     # seed = 0
-#     # random.seed(seed)
-#     # torch.manual_seed(seed)
-#     # torch.cuda.manual_seed(seed)
-#     # np.random.seed(seed)
-#     # os.environ['PYTHONHASHSEED'] =  str(seed)
-
-#     class_list = ['bus', 'cat', 'pizza']
-
-#     net = HW5Net(3)
-#     net = net.to(torch.float32)
-#     net.load_state_dict(torch.load(ROOT+'/models/model5', map_location=torch.device('cpu')))
-
-#     # loss_trace, loss_traces = train(net, save=True)
-#     # labels_names = ["BCE", "MSE", "Cross entropy"]
-#     # plt.plot(loss_trace, label = "Combined")
-#     # for i, trace in enumerate(zip(*loss_traces)):
-#     #     plt.plot(trace, label = labels_names[i])
-
-#     # plt.ylabel('Loss')
-#     # plt.xlabel('Processed batches * nz')
-#     # plt.legend()
-#     # plt.savefig("./out/loss_trace1.png")
-
-#     transform = tvt.Compose([tvt.ToTensor(), tvt.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
-
-#     dataset = COCODataset(
-#         root=ROOT,
-#         categories_list=class_list,
-#         train = False,
-#         clear = False,
-#         download = False,
-#         verify = True,
-#         grid_size = 64,
-#         return_raw = False,
-#         anchor_boxes = 5,
-#         transform=transform
-#     )
-#     raw_dataset = COCODataset(
-#         root=ROOT,
-#         categories_list=class_list,
-#         train = False,
-#         clear = False,
-#         download = False,
-#         verify = True,
-#         grid_size = 64,
-#         return_raw = False,
-#         anchor_boxes = 5,
-#     )
-
-#     MAX_SHOW = 3
-
-#     for _ in range(nz):
-#         # Get index from the dataset
-#         idx =  np.random.randint(0, len(dataset)) # 452, 2343 388 97 136 3284
-#         # idx= 136
-#         print(idx)
-#         image, _ = raw_dataset[idx]
-#         image_input , label = dataset[idx]
-
-#         label = net(image_input.unsqueeze(0)).squeeze(0)
-
-#         print("Image size: ", image.size)
-#         print("Label size: ", label.size())
-#         # print(label[..., 0])
-
-#         # Find indices and bboxes where there is an image:
-#         pred_bce = nn.Sigmoid()(label[..., 0])
-#         # top = torch.topk(pred_bce, 3, dim=-1)
-#         # print("TOP: ", top)
-#         Iobj_i = (nn.Sigmoid()(label[..., 0])>0.1).bool()
-
-#         selected_igms = label[Iobj_i]
-#         _, select_ind = torch.topk(selected_igms[..., 0], 2)
-#         print(select_ind)
-#         selected_igms = selected_igms[select_ind]
-#         selected_igms_positions = Iobj_i.nonzero(as_tuple=False)
-#         selected_igms_positions =selected_igms_positions[select_ind]
-#         print("Selected yolo vectors: ", selected_igms)
-#         print("Selected yolo vectors positions: ", selected_igms_positions)
-
-#         # Show image and corresponding bounding boxes:
-#         image = np.uint8(image)
-#         fig, ax = plt.subplots(1, 1)
-#         for yolo_vector, position in zip(selected_igms, selected_igms_positions):
-#             # get bbox values and convert them to scalars
-#             x, y, w, h = yolo_vector[1:5].tolist()
-#             class_vector = yolo_vector[5:].tolist()
-#             class_index = class_vector.index(max(class_vector))
-#             anchor_idx, x_idx, y_idx = position.tolist()
-
-#             if anchor_idx == 0: 
-#                 w_scale, h_scale = 3, 1
-#             if anchor_idx == 1: 
-#                 w_scale, h_scale = 2, 1
-#             if anchor_idx == 2: 
-#                 w_scale, h_scale = 1, 1
-#             if anchor_idx == 3: 
-#                 w_scale, h_scale = 1, 2
-#             if anchor_idx == 4: 
-#                 w_scale, h_scale = 1, 3
-
-#             # Select correct dimenstions
-#             x = int((x + (x_idx + 0.5)) * dataset.grid_size)
-#             y = int((y + (y_idx + 0.5)) * dataset.grid_size)
-#             w = int(math.exp(w) * dataset.grid_size * w_scale)
-#             h = int(math.exp(h) * dataset.grid_size * h_scale)
-
-#             print(x, y, w, h)
-
-#             image = cv2.rectangle(image, (int(x - w/2), int(y - h/2)), (int(x + w/2), int(y + h/2)), (36, 255, 12), 2) 
-#             image = cv2.putText(image, class_list[class_index], (int(x), int(y - 10)), cv2.FONT_HERSHEY_SIMPLEX , 0.8, (36, 255, 12), 2)
+    #  At the end of training, make plots from the data in Gen_losses and Cri_losses:
+    plt.figure(figsize=(10,5))                                                                             
+    plt.title("Generator and Critic Loss During Training")                                          
+    plt.plot(Gen_losses,label="G")                                                                           
+    plt.plot(Cri_losses,label="C")                                                                           
+    plt.xlabel("iterations")                                                                               
+    plt.ylabel("Loss")                                                                                     
+    plt.legend()                                                                                           
+    plt.savefig("out/figure_wgan.png")                                  
+    plt.show()                                                                                             
+    #  Make an animated gif from the Generator output images stored in img_list:  
+    #
+    fig = plt.figure(figsize=(8,8))
+    plt.axis("off")
+    # ims = [[plt.imshow(np.transpose(i,(1,2,0)), animated=True)] for i in img_list]
+    ims = [[plt.imsave(f"out/imgs/{index}.png" , np.transpose(i,(1,2,0)).numpy())] for index, i in enumerate(img_list)]  
 
 
-#         ax.imshow(image) 
-#         ax.set_axis_off() 
-#         plt.axis('tight') 
-#         plt.show()
+    # images = []                                                                                            
+    # for imgobj in img_list:                                                                                
+    #     img = tvtF.to_pil_image(imgobj)                                                                    
+    #     images.append(img)                                                                                 
+    # imageio.mimsave(dir_name_for_results + "/generation_animation.gif", images, fps=5)                     
+    
+    # #  Make a side-by-side comparison of a batch-size sampling of real images drawn from the
+    # #  training data and what the Generator is capable of producing at the end of training:
+    # real_batch = next(iter(dataloader))                                                        
+    # real_batch = real_batch[0]
+    # plt.figure(figsize=(15,15))                                                                           
+    # plt.subplot(1,2,1)                                                                                    
+    # plt.axis("off")                                                                                       
+    # plt.title("Real Images")                                                                              
+    # plt.imshow(np.transpose(torchvision.utils.make_grid(real_batch.to(self.device), 
+    #                                     padding=1, pad_value=1, normalize=True).cpu(),(1,2,0)))  
+    # plt.subplot(1,2,2)                                                                             
+    # plt.axis("off")                                                                                
+    # plt.title("Fake Images")                                                                       
+    # plt.imshow(np.transpose(img_list[-1],(1,2,0)))                                                 
+    # plt.savefig(dir_name_for_results + "/real_vs_fake_images.png")                                 
+    # plt.show()                                                                                     
 
+
+def get_fid(real_paths, fake_paths):
+    dims = 2048
+    block_idx = InceptionV3.BLOCK_INDEX_BY_DIM[dims] 
+    model = InceptionV3([block_idx]).to(device)
+    m1, s1 = calculate_activation_statistics( real_paths, model, device=device)
+    m2, s2 = calculate_activation_statistics( fake_paths, model, device=device)
+    fid_value = calculate_frechet_distance(m1, s1, m2, s2)
+    print ('FID: {:.2f}'.format(fid_value))
+
+def generate_1000(model):
+    im_path = os.path.join(DATA_ROOT, "train")
+    im
+    for i in range(1000):
+        fixed_noise = torch.randn(32, 100, 1, 1, device=device)
+
+
+if __name__=="__main__":
+    train_bce()
