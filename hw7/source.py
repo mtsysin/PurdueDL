@@ -253,6 +253,16 @@ if __name__=="__main__":
     plt.legend()
     plt.savefig("out/figure.png")
 
+
+    fig = plt.figure(figsize=(8,8))
+    plt.axis("off")
+    # ims = [[plt.imshow(np.transpose(i,(1,2,0)), animated=True)] for i in img_list]
+    ims = [[plt.imsave(f"out/imgs/{index}.png" , np.transpose(i,(1,2,0)).numpy())] for index, i in enumerate(img_list)]
+
+    # ani = animation.ArtistAnimation(fig, ims, interval=1000, repeat_delay=1000, blit=True)
+
+    # HTML(ani.to_jshtml())
+
 # def train(net, save = False):
 #     # Choose device
 #     if torch.cuda.is_available()== True: 
