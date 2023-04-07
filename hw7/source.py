@@ -35,7 +35,7 @@ lr = 0.0002
 # Beta1 hyperparam for Adam optimizers
 beta1 = 0.5
 # Number of training epochs
-num_epochs = 50
+num_epochs = 100
 # Length of noise vector
 nz = 100
 
@@ -127,14 +127,13 @@ class Critic(nn.Module):
             nn.BatchNorm2d(64 * 8),
             nn.LeakyReLU(0.2, inplace=True),
             # state size. (ndf*8) x 4 x 4
-            nn.Conv2d(64 * 8, 1, 2, 0, 0, bias=False),
+            nn.Conv2d(64 * 8, 1, 4, 1, 0, bias=False),
         )
-        self.final = nn.Linear(batch_size * 4, 1)
+        self.final = nn.Linear(1, 1)
     def forward(self, x):              
         x = self.main(x)
-        print(x.size())
-        x = x.view(-1)
         x = self.final(x)
+        x = x.view(-1)
         x = x.mean(0)       
         x = x.view(1)
         return x
@@ -186,7 +185,7 @@ def train_bce():
 
     # Create batch of latent vectors that we will use to visualize
     #  the progression of the generator
-    fixed_noise = torch.randn(64, nz, 1, 1, device=device)
+    fixed_noise = torch.randn(16, nz, 1, 1, device=device)
 
     # Establish convention for real and fake labels during training
     real_label = 1.
@@ -267,7 +266,7 @@ def train_bce():
             if (iters % 250 == 0) or ((epoch == num_epochs-1) and (i == len(dataloader)-1)):
                 with torch.no_grad():
                     fake = netG(fixed_noise).detach().cpu()
-                img_list.append(torchvision.utils.make_grid(fake, padding=2, normalize=True))
+                img_list.append(torchvision.utils.make_grid(fake, padding=2, normalize=True, nrow = 4))
 
             iters += 1
 
@@ -293,6 +292,8 @@ def train_bce():
 
     # HTML(ani.to_jshtml())
 
+    return netG
+
 
 def wgan():
     """
@@ -305,10 +306,9 @@ def wgan():
                     wgan_CG1.py
     """
 
-
     # Create the generator
     netG = Generator().to(device)
-    # Create the Discriminator
+    # Create the Critic
     netC = Critic().to(device)
 
     # Apply the weights_init function to randomly initialize all weights
@@ -322,20 +322,14 @@ def wgan():
 
     # Create batch of latent vectors that we will use to visualize
     #  the progression of the generator
-    fixed_noise = torch.randn(64, nz, 1, 1, device=device)
+    fixed_noise = torch.randn(16, nz, 1, 1, device=device)
 
     # Setup Adam optimizers for both G and D
     optimizerC = torch.optim.Adam(netC.parameters(), lr=lr, betas=(beta1, 0.999))
     optimizerG = torch.optim.Adam(netG.parameters(), lr=lr, betas=(beta1, 0.999))
     
-
-    #  These are for training the Critic, 'one' is for the part of the training with actual
-    #  training images, and 'minus_one' is for the part based on the images produced by the 
-    #  Generator:
     one = torch.FloatTensor([1]).to(device)
     minus_one = torch.FloatTensor([-1]).to(device)
-    # one = torch.tensor(1, dtype=torch.float)
-    # minus_one = torch.tensor(-1, dtype=torch.float)
 
 
     img_list = []                               
@@ -343,7 +337,7 @@ def wgan():
     Cri_losses = []                               
     iters = 0                                   
     gen_iterations = 0
-    print("\n\nStarting Training Loop.......[Be very patient at the beginning since the Critic must separately be taken through a few hundred iterations of training before you get to see anything displayed in your terminal window.  Depending on your hardware, it may take around 5 minutes. Subsequently, each 100 iterations will take just a few seconds. ]\n\n")      
+    print("\n\nStarting Training Loop.......\n\n")      
     start_time = time.perf_counter()            
     clipping_thresh = 0.01
     # For each epoch
@@ -357,34 +351,21 @@ def wgan():
             if gen_iterations < 25 or gen_iterations % 500 == 0:    # the choices 25 and 500 are from WGAN
                 ncritic = 100
             ic = 0
-            ##  The inner 'while' loop shown below calculates the expectations in Eq. (8) in the doc section
-            ##  at the beginning of this file:
             while ic < ncritic and i < len(dataloader):
+                print(ic ,ncritic, i ,len(dataloader))
                 ic += 1
                 for p in netC.parameters():
                     p.data.clamp_(-clipping_thresh, clipping_thresh)
                 ## Training the Critic (Part 1):
-                #  The maximization needed for training the Critic, as shown in Eq. (8) in the doc section
-                #  at the beginning of this file, consists of two parts.  The first part involves applying the
-                #  Critic network to just the training images, with each image subject to a "gradient
-                #  target" of "-1".
                 netC.zero_grad()                                                                            
                 real_images_in_batch =  next(data_iter)
                 i += 1
                 real_images_in_batch =  real_images_in_batch[0].to(device)   
-                #  Need to know how many images we pulled in since at the tailend of the dataset, the 
-                #  number of images may not equal the user-specified batch size:
                 b_size = real_images_in_batch.size(0)   
-                #  Note that a single scalar is produced for all the data in a batch.  This is probably
-                #  the reason why what the Generator learns is somewhat fuzzy.
                 critic_for_reals_mean = netC(real_images_in_batch)
-                ## 'minus_one' is the gradient target:
                 critic_for_reals_mean.backward(minus_one)  
 
                 ## Training the Critic (Part 2):
-                #  The second part of Critic training requires that we apply the Critic to the images
-                #  produced by the Generator for a fresh batch of input noise vectors. The output of 
-                #  the Critic for these images must be subject to the target "-1".
                 noise = torch.randn(b_size, nz, 1, 1, device=device)    
                 fakes = netG(noise)          
                 #  Again, a single number is produced for the whole batch:
@@ -397,10 +378,6 @@ def wgan():
                 optimizerC.step()   
 
             ## Training the Generator:
-            ##   That brings us to the training of the Generator through the minimization required by the 
-            ##   minmax objective in Eq. (7) at the beginning of this file.  To that end, first we must 
-            ##   turn off the "requires_grad" of the Critic parameters since the Critic and the Generator 
-            ##   must be updated independently:
             for p in netC.parameters():
                 p.requires_grad = False
             netG.zero_grad()                         
@@ -414,7 +391,9 @@ def wgan():
             optimizerG.step()                                                                          
             gen_iterations += 1
 
-            if i % (ncritic * 20) == 0:   
+            print(epoch, i)
+
+            if i % (ncritic * 1) == 0:   
                 current_time = time.perf_counter()                                                            
                 elapsed_time = current_time - start_time                                                      
                 print("[epoch=%d/%d   i=%4d   el_time=%5d secs]     loss_critic=%7.4f   loss_gen=%7.4f   Wasserstein_dist=%7.4f" %  (epoch, num_epochs,i,elapsed_time,loss_critic.data[0], loss_gen.data[0], wasser_dist.data[0]))
@@ -426,7 +405,10 @@ def wgan():
                     fake = netG(fixed_noise).detach().cpu()  ## detach() removes the fake from comp. graph.
                                                                 ## for its CPU compatible version
                 img_list.append(torchvision.utils.make_grid(fake, padding=1, pad_value=1, normalize=True))   
-            iters += 1                                                                                        
+            iters += 1       
+
+    torch.save(netC.state_dict(), 'models/netC')
+    torch.save(netG.state_dict(), 'models/netG')                                                                                 
     
     #  At the end of training, make plots from the data in Gen_losses and Cri_losses:
     plt.figure(figsize=(10,5))                                                                             
@@ -443,31 +425,7 @@ def wgan():
     fig = plt.figure(figsize=(8,8))
     plt.axis("off")
     # ims = [[plt.imshow(np.transpose(i,(1,2,0)), animated=True)] for i in img_list]
-    ims = [[plt.imsave(f"out/imgs/{index}.png" , np.transpose(i,(1,2,0)).numpy())] for index, i in enumerate(img_list)]  
-
-
-    # images = []                                                                                            
-    # for imgobj in img_list:                                                                                
-    #     img = tvtF.to_pil_image(imgobj)                                                                    
-    #     images.append(img)                                                                                 
-    # imageio.mimsave(dir_name_for_results + "/generation_animation.gif", images, fps=5)                     
-    
-    # #  Make a side-by-side comparison of a batch-size sampling of real images drawn from the
-    # #  training data and what the Generator is capable of producing at the end of training:
-    # real_batch = next(iter(dataloader))                                                        
-    # real_batch = real_batch[0]
-    # plt.figure(figsize=(15,15))                                                                           
-    # plt.subplot(1,2,1)                                                                                    
-    # plt.axis("off")                                                                                       
-    # plt.title("Real Images")                                                                              
-    # plt.imshow(np.transpose(torchvision.utils.make_grid(real_batch.to(self.device), 
-    #                                     padding=1, pad_value=1, normalize=True).cpu(),(1,2,0)))  
-    # plt.subplot(1,2,2)                                                                             
-    # plt.axis("off")                                                                                
-    # plt.title("Fake Images")                                                                       
-    # plt.imshow(np.transpose(img_list[-1],(1,2,0)))                                                 
-    # plt.savefig(dir_name_for_results + "/real_vs_fake_images.png")                                 
-    # plt.show()                                                                                     
+    ims = [[plt.imsave(f"out/imgs/{index}.png" , np.transpose(i,(1,2,0)).numpy())] for index, i in enumerate(img_list)]                                                                              
 
 
 def get_fid(real_paths, fake_paths):
@@ -481,10 +439,27 @@ def get_fid(real_paths, fake_paths):
 
 def generate_1000(model):
     im_path = os.path.join(DATA_ROOT, "train")
-    im
+    im_list = os.listdir(im_path)
+    real_path = [os.path.join(im_path, im) for im in im_list[:1000]]
+    fake_path = [f"fakes/{i}.jpg" for i in range(1000)]
+    transfrom = torchvision.transforms.ToPILImage()
+
     for i in range(1000):
-        fixed_noise = torch.randn(32, 100, 1, 1, device=device)
+        noise = torch.randn(1, nz, 1, 1, device=device)
+        out = model(noise)
+        with torch.no_grad():
+            # plt.imsave(fake_path[i], np.transpose(out[0].detach().cpu(),(1,2,0)).numpy())
+            img = out[0].detach().cpu().numpy()
+            img = (img-np.min(img))/(np.max(img)-np.min(img))
+            plt.imsave(fake_path[i], np.transpose(img,(1,2,0)))
+
+    return real_path, fake_path
 
 
 if __name__=="__main__":
-    train_bce()
+    # model = wgan()
+    netG = Generator().to(device)
+    netG.load_state_dict(torch.load("models/netG"))
+
+    real_path, fake_path = generate_1000(netG)
+    get_fid(real_path, fake_path)
