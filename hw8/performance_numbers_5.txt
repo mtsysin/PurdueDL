@@ -1,0 +1,52 @@
+0.69260
+0.69269
+0.68503
+0.68851
+0.68361
+0.66623
+0.64625
+0.58878
+0.60039
+0.56493
+0.51222
+0.53900
+0.48436
+0.46843
+0.43155
+0.46690
+0.46408
+0.49473
+0.64489
+0.47218
+0.42061
+0.39599
+0.41840
+0.37040
+0.47868
+0.44008
+0.43565
+0.50621
+0.42342
+0.42550
+0.38453
+0.37849
+0.39883
+0.42614
+0.37344
+
+
+Overall classification accuracy: 75.63%
+
+
+Number of positive reviews tested: 200
+
+
+Number of negative reviews tested: 195
+
+
+Displaying the confusion matrix:
+
+                      predicted negative    predicted positive
+
+true negative:              70.256%            29.744%
+true positive:                19.5%              80.5%
