@@ -1,0 +1,82 @@
+import random
+import operator
+import numpy as np
+import matplotlib.pyplot as plt
+from torchinfo import summary
+import seaborn as sn
+import torch
+import torch.nn as nn 
+from ViTHelper import MasterEncoder
+
+class MultiheadEinsum(nn.Module):
+    def __init__(self, max_seq_length, embedding_size, num_atten_heads) -> None:
+        super().__init__()
+
+        self.max_seq_length = max_seq_length
+        self.num_atten_heads = num_atten_heads
+        # Stacked matrices Wq, Wk, Wv. Used to obtain q, k, v values. We need to have multiple q, k, v vectors.
+        # The input matrix is of shape (Nw * Nh, M / Nh) -- stacked emedding chunks on top of each other
+        # output shape is (Nw * Nh, M / Nh * 3) -- we have q, k, v stacked horizontally and all chunks vertically
+        # The shape of linear layer is (M / Nh * 3, )
+        self.wq_wk_wv = nn.Linear(embedding_size // num_atten_heads, num_atten_heads * embedding_size * 3, bias=False)
+
+    def forward(self, x):
+        #Get q, k, v -- use combined matriices and then chunk the resluting tensor into 3 parts.
+        # Treat each part as corresponding output for each head stacked together -- It doesn't matter in which order we learn the weights.
+        # We get 3 tensors of shape (batch, max_seq_length, num_atten_heads * embedding_size)
+        q, k, v = torch.chunk(self.wq_wk_wv(x).view(-1, self.max_seq_length, self.num_atten_heads), 3, dim=-1)
+        print(q.shape, k.shape, v.shape)
+
+
+
+class ViT(nn.Module):
+    def __init__(self, im_size, patch_size, token_size, basic_encoders, num_heads, out_classes) -> None:
+        super().__init__()
+        self.im_size = im_size
+        self.patch_size = patch_size
+        self.n_patch = im_size // patch_size
+        self.token_size = token_size
+        # Create a linear mapping to generate patches (the number of output channels is essentially a token size)
+        self.patch_transform = nn.Conv2d(3, token_size, patch_size, patch_size)
+        # Create a learnable initial class token
+        self.class_token = nn.Parameter(torch.rand(1, token_size))
+        # Create learnable positional encoding
+        self.posiional_encoding = nn.Parameter(torch.rand(self.n_patch**2 + 1, token_size))
+
+        # Define a Transormer Encoder
+        self.encoder = MasterEncoder(self.n_patch**2 + 1, token_size, basic_encoders, num_heads)
+        # Define MLP:
+        self.mlp = nn.Sequential(
+            nn.Linear(token_size, out_classes),
+            nn.Softmax(dim=-1)
+        )
+
+    def forward(self, input_image):
+        batch = input_image.shape[0]
+        # Get patch tokens using convoluation:
+        patch_tokens = self.patch_transform(input_image)
+        # Convert patches to acceptable shape:
+        patch_tokens = patch_tokens.permute(0, 2, 3, 1)
+        patch_tokens = patch_tokens.view(batch, -1, self.token_size)
+        # Add class token:
+        class_token = self.class_token.repeat(batch, 1, 1)
+        patch_tokens = torch.cat([patch_tokens, class_token], dim = 1)
+        # Add positional encoding
+        pos_encoding = self.posiional_encoding.repeat(batch, 1, 1)
+        patch_tokens += pos_encoding
+        # Run encoder
+        out = self.encoder(patch_tokens)
+        # Get last element:
+        out = out[:, -1, :]
+        out = self.mlp(out)
+
+        return out
+
+if __name__=="__main__":
+
+    net = ViT(64, 16, 24, 10, 2, 5)
+    summary(net, input_size=(10, 3, 64, 64))
+    # net = MultiheadEinsum(4, 7, 16, 10)
+    # input = torch.rand(13, 5, 7)
+    # net(input)
+ 

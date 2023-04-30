@@ -5,4 +5,10 @@
 !.gitignore
 *.zip
 DLStudio-2.2.2/
+DLStudio-2.2.5/
+DLStudio-2.2.5.tar
+DLStudio-2.2.8/
+DLStudio-2.2.8.tar
 models/
+*/nohup.out
+*.pt
