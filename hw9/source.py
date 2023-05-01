@@ -173,7 +173,7 @@ def train(net, save = False):
 
     # Create transform
     transform = tvt.Compose([tvt.ToTensor(), tvt.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
-    batch = 64
+    batch = 25
 
     train_dataset = COCODataset(
         root=ROOT,
@@ -196,8 +196,8 @@ def train(net, save = False):
     criterion = torch.nn.CrossEntropyLoss() 
     optimizer = torch.optim.Adam(
         net.parameters(), 
-        lr=5e-5, 
-        betas=(0.9, 0.99)
+        lr=1e-3, 
+        betas=(0.9, 0.999)
     )
     
     losses = []
@@ -330,7 +330,7 @@ if __name__=="__main__":
     #         axarr[cat,i].axis('off')
     # plt.savefig("./out/data_val.png")
 
-    net = ViT(64, 16, 24, 10, 2, 5)
+    net = ViT(64, 16, 240, 4, 15, 5)
 
     net = net.to(torch.float)
 
